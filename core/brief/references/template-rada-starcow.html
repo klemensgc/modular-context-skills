@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title><!-- REPLACE: title --></title>
+<style>
+  /* ═══════════════════════════════════════════
+     RADA STARCOW — Cormorant Garamond + Inter
+     Accent: #8b7355 (gold-brown)  Background: #faf9f6 (warm-white)
+     Sub-warianty: Compact Task Brief, Arcadian Event
+     ═══════════════════════════════════════════ */
+
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --black: #0a0a0a;
+    --near-black: #1a1a1a;
+    --dark-gray: #2a2a2a;
+    --medium-gray: #666;
+    --light-gray: #999;
+    --off-white: #f5f3ef;
+    --cream: #ebe8e1;
+    --warm-white: #faf9f6;
+    --accent: #8b7355;
+    --accent-light: #b5a48a;
+    --accent-dark: #6b5a42;
+    --rule: #d4cfc6;
+    --green: #4a7c59;
+    --green-bg: #e8f0ea;
+    --red: #8c4040;
+    --red-bg: #f0e8e8;
+    --yellow-bg: #f0ede4;
+    --blue: #4a6b8c;
+    --blue-bg: #e8eef4;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  @page { size: 210mm 297mm; margin: 0; }
+
+  body {
+    background: #c8c4bc;
+    font-family: 'Inter', -apple-system, sans-serif;
+    color: var(--near-black);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ═══ PAGE SETUP (QG-1 compliant: flexbox + height) ═══ */
+  .page {
+    width: 210mm;
+    height: 297mm;
+    background: var(--warm-white);
+    margin: 20px auto;
+    padding: 18mm 22mm;
+    position: relative;
+    page-break-after: always;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .page-content { flex: 1; }
+
+  @media print {
+    body { background: white; }
+    .page { margin: 0; }
+  }
+  @media screen {
+    body { display: flex; flex-direction: column; align-items: center; gap: 24px; padding: 24px; }
+  }
+
+  /* ═══ TYPOGRAPHY ═══ */
+  .serif { font-family: 'Cormorant Garamond', Georgia, serif; }
+  h1 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 36pt; line-height: 1.15; letter-spacing: -0.02em; color: var(--black); }
+  h2 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 22pt; line-height: 1.2; color: var(--black); margin-bottom: 8px; }
+  h3 { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 9pt; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); margin-bottom: 6px; }
+  p, li { font-family: 'Inter', sans-serif; font-size: 9pt; line-height: 1.65; color: var(--dark-gray); }
+  .tagline { font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-weight: 400; font-size: 13pt; color: var(--medium-gray); line-height: 1.5; }
+
+  /* ═══ STRUCTURAL ELEMENTS ═══ */
+  .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6mm; padding-bottom: 4mm; border-bottom: 1px solid var(--rule); }
+  .page-label { font-family: 'Inter', sans-serif; font-size: 7pt; text-transform: uppercase; letter-spacing: 0.15em; color: var(--light-gray); }
+  .section-divider { width: 100%; height: 1px; background: var(--rule); margin: 4mm 0; }
+  .ornament { text-align: center; color: var(--accent-light); font-size: 14pt; margin: 5mm 0; letter-spacing: 0.5em; }
+
+  /* ═══ GRID LAYOUTS ═══ */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+  /* ═══ PULL QUOTE ═══ */
+  .pull-quote { font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 13pt; color: var(--accent-dark); text-align: center; padding: 8px 20px; line-height: 1.45; }
+
+  /* ═══ METRIC CARDS ═══ */
+  .metric-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 8px 0; }
+  .metric-card { text-align: center; padding: 8px; border: 1px solid var(--rule); border-radius: 3px; }
+  .metric-card .number { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 700; font-size: 22pt; color: var(--accent); }
+  .metric-card .label { font-family: 'Inter', sans-serif; font-size: 7pt; text-transform: uppercase; letter-spacing: 0.1em; color: var(--medium-gray); margin-top: 2px; }
+
+  /* ═══ PLAY CARDS ═══ */
+  .play-card { border: 1px solid var(--rule); border-radius: 3px; padding: 10px 12px; margin: 6px 0; position: relative; }
+  .play-card .play-type { position: absolute; top: 8px; right: 10px; font-size: 7pt; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; padding: 2px 8px; border-radius: 2px; }
+  .play-card .play-type.capture { background: var(--green-bg); color: var(--green); }
+  .play-card .play-type.amplify { background: var(--blue-bg); color: var(--blue); }
+  .play-card .play-type.build { background: var(--yellow-bg); color: var(--accent-dark); }
+  .play-card .play-type.discover { background: var(--red-bg); color: var(--red); }
+  .play-title { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 13pt; color: var(--black); margin-bottom: 4px; }
+  .play-hypothesis { font-size: 8pt; color: var(--dark-gray); line-height: 1.6; }
+
+  /* ═══ PERSONA BOX ═══ */
+  .persona-box { background: var(--cream); border-radius: 3px; padding: 10px 12px; margin: 6px 0; }
+  .persona-name { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 700; font-size: 14pt; color: var(--black); }
+  .persona-lens { font-size: 7pt; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 4px; }
+  .persona-insight { font-size: 8pt; color: var(--dark-gray); line-height: 1.6; margin-bottom: 4px; }
+
+  /* ═══ CONSENSUS BOX ═══ */
+  .consensus-box { background: var(--cream); border-radius: 3px; padding: 10px 12px; margin: 6px 0; display: flex; gap: 12px; align-items: flex-start; }
+  .consensus-body { flex: 1; min-width: 0; }
+  .consensus-number { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 700; font-size: 26pt; color: var(--accent); line-height: 1; flex-shrink: 0; width: 36px; }
+  .consensus-title { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 9.5pt; color: var(--black); margin-bottom: 3px; }
+  .consensus-desc { font-family: 'Inter', sans-serif; font-size: 8pt; color: var(--dark-gray); line-height: 1.6; }
+
+  /* ═══ VERDICT BOX (dark inverted) ═══ */
+  .verdict-box { background: var(--near-black); color: var(--off-white); padding: 14px 16px; border-radius: 3px; margin: 8px 0; }
+  .verdict-box h3 { color: var(--accent-light); }
+  .verdict-box p { color: var(--cream); font-size: 9pt; line-height: 1.7; }
+
+  /* ═══ FACT ITEMS ═══ */
+  .fact-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 4px 0; }
+  .fact-item { padding: 6px 10px; border-left: 3px solid var(--accent); background: var(--cream); }
+  .fact-item .fact-label { font-size: 7pt; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); font-weight: 600; }
+  .fact-item .fact-value { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 16pt; font-weight: 700; color: var(--black); }
+  .fact-item .fact-note { font-size: 7pt; color: var(--medium-gray); }
+
+  /* ═══ TABLE ═══ */
+  .conv-table { width: 100%; border-collapse: collapse; margin: 6px 0; }
+  .conv-table th { font-size: 7pt; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); padding: 6px 8px; text-align: left; border-bottom: 2px solid var(--accent); }
+  .conv-table td { font-size: 8pt; padding: 5px 8px; border-bottom: 1px solid var(--rule); color: var(--dark-gray); vertical-align: top; }
+
+  /* ═══ TAGS ═══ */
+  .tag { font-size: 7pt; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; padding: 2px 8px; border-radius: 2px; display: inline-block; }
+  .tag-agree { background: var(--green-bg); color: var(--green); }
+  .tag-disagree { background: var(--red-bg); color: var(--red); }
+  .tag-new { background: var(--yellow-bg); color: var(--accent-dark); }
+  .tag-build { background: var(--blue-bg); color: var(--blue); }
+
+  /* ═══ TIMELINE (Arcadian sub-wariant) ═══ */
+  .timeline { padding-left: 16px; border-left: 2px solid var(--accent-light); margin: 8px 0; }
+  .tl-item { position: relative; padding: 6px 0 6px 12px; }
+  .tl-item::before { content: ''; position: absolute; left: -21px; top: 12px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+  .tl-item .tl-date { font-size: 7pt; color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; }
+  .tl-item .tl-text { font-size: 8pt; color: var(--dark-gray); line-height: 1.6; }
+
+  /* ═══ WATERMARK (text-based, Rada Starcow style) ═══ */
+  .watermark { position: absolute; bottom: 15mm; right: 20mm; opacity: 0.03; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 120pt; font-weight: 700; color: var(--black); pointer-events: none; }
+
+  /* ═══ FOOTER (QG-1: margin-top auto) ═══ */
+  .footer-bar { display: flex; justify-content: space-between; align-items: center; padding-top: 4mm; border-top: 1px solid var(--rule); margin-top: auto; }
+  .footer-bar span { font-family: 'Inter', sans-serif; font-size: 7pt; color: var(--light-gray); }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ PAGE 1: COVER ═══════════ -->
+<div class="page">
+  <div class="page-content" style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+    <div style="margin-bottom: 20mm;">
+      <!-- Rada Starcow uzywa SVG concentric circles, NIE signet receptionOS -->
+      <svg width="50" height="50" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="45" fill="none" stroke="#8b7355" stroke-width="2"/>
+        <circle cx="50" cy="50" r="30" fill="none" stroke="#8b7355" stroke-width="1.5"/>
+        <circle cx="50" cy="50" r="15" fill="none" stroke="#8b7355" stroke-width="1"/>
+        <circle cx="50" cy="50" r="4" fill="#8b7355"/>
+      </svg>
+    </div>
+    <h3 style="margin-bottom: 8mm;"><!-- REPLACE: series label --></h3>
+    <h1 style="font-size: 42pt; margin-bottom: 6mm;"><!-- REPLACE: title --></h1>
+    <p class="tagline" style="max-width: 380px; margin: 0 auto 12mm;"><!-- REPLACE: tagline --></p>
+    <div class="section-divider" style="max-width: 80px; margin: 0 auto 10mm;"></div>
+    <div style="margin-top: 16mm;">
+      <p style="font-size: 8pt; color: var(--light-gray);"><!-- REPLACE: date --> &mdash; modular-context</p>
+    </div>
+  </div>
+  <div class="watermark">R</div>
+</div>
+
+<!-- ═══════════ PAGE 2: CONTENT ═══════════ -->
+<div class="page">
+  <div class="header-bar">
+    <span class="page-label"><!-- REPLACE: section label --></span>
+    <span class="page-label"><!-- REPLACE: document name --></span>
+  </div>
+  <div class="page-content">
+    <h2><!-- REPLACE: section title --></h2>
+    <p style="margin: 6px 0 12px;"><!-- REPLACE: intro --></p>
+
+    <h3><!-- REPLACE: subsection --></h3>
+    <div class="metric-row">
+      <div class="metric-card"><div class="number"><!-- REPLACE --></div><div class="label"><!-- REPLACE --></div></div>
+      <div class="metric-card"><div class="number"><!-- REPLACE --></div><div class="label"><!-- REPLACE --></div></div>
+      <div class="metric-card"><div class="number"><!-- REPLACE --></div><div class="label"><!-- REPLACE --></div></div>
+      <div class="metric-card"><div class="number"><!-- REPLACE --></div><div class="label"><!-- REPLACE --></div></div>
+    </div>
+
+    <div class="ornament">&bull; &bull; &bull;</div>
+
+    <h3><!-- REPLACE: subsection --></h3>
+    <div class="consensus-box">
+      <div class="consensus-number">1</div>
+      <div class="consensus-body">
+        <div class="consensus-title"><!-- REPLACE --></div>
+        <div class="consensus-desc"><!-- REPLACE --></div>
+      </div>
+    </div>
+    <div class="consensus-box">
+      <div class="consensus-number">2</div>
+      <div class="consensus-body">
+        <div class="consensus-title"><!-- REPLACE --></div>
+        <div class="consensus-desc"><!-- REPLACE --></div>
+      </div>
+    </div>
+
+    <div class="verdict-box">
+      <h3><!-- REPLACE: verdict label --></h3>
+      <p><!-- REPLACE: verdict text --></p>
+    </div>
+  </div>
+
+  <div class="footer-bar">
+    <span><!-- REPLACE: document name --></span>
+    <span>Page 2</span>
+  </div>
+</div>
+
+</body>
+</html>

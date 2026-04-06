@@ -1,0 +1,228 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-04-06",
+  "source": "https://github.com/klemensgc/modular-context-skills",
+  "skills": [
+    {
+      "id": "pulse",
+      "label": "Pulse",
+      "description": "CEO Pulse — deep vault scan, structured briefing, decision questions, actionable next-session prompts.",
+      "version": "1.0.0",
+      "category": "analysis",
+      "tier": "core",
+      "files": ["SKILL.md", "references/question-types.md"],
+      "size": "16KB",
+      "primary": true
+    },
+    {
+      "id": "brief",
+      "label": "Brief",
+      "description": "Creates polished PDF briefs, one-pagers, spec sheets through a structured pipeline: content → design brief → HTML wireframe → WeasyPrint PDF.",
+      "version": "1.0.0",
+      "category": "creation",
+      "tier": "core",
+      "files": ["SKILL.md", "references/template-siebe-light.html", "references/template-siebe-dark.html", "references/template-rada-starcow.html", "references/css-templates.md", "references/examples.md"],
+      "size": "84KB",
+      "primary": true
+    },
+    {
+      "id": "process-transcripts",
+      "label": "Ingest Data",
+      "description": "Process new sources — categorize, extract insights, update wiki modules. Autonomous transcript processing pipeline.",
+      "version": "1.0.0",
+      "category": "workflow",
+      "tier": "core",
+      "files": ["COMMAND.md"],
+      "size": "8KB",
+      "primary": true,
+      "type": "command"
+    },
+    {
+      "id": "log",
+      "label": "Log",
+      "description": "Close work sessions — generate session log, split changes into logical commits, prevent overwriting newer files.",
+      "version": "1.0.0",
+      "category": "workflow",
+      "tier": "core",
+      "files": ["SKILL.md"],
+      "size": "8KB",
+      "primary": false
+    },
+    {
+      "id": "ideas",
+      "label": "Ideas",
+      "description": "Generates new ideas using 6 triggers (gaps, intersections, analogies, contrarian, scale, subtraction) grounded in your vault context.",
+      "version": "1.0.0",
+      "category": "ideation",
+      "tier": "core",
+      "files": ["SKILL.md"],
+      "size": "8KB",
+      "primary": false
+    },
+    {
+      "id": "reweave",
+      "label": "Reweave",
+      "description": "Cascade-update stale or disconnected modules. Scans vault for outdated content and automatically refreshes it.",
+      "version": "1.0.0",
+      "category": "workflow",
+      "tier": "core",
+      "files": ["SKILL.md"],
+      "size": "8KB",
+      "primary": false
+    },
+    {
+      "id": "vault-audit",
+      "label": "Vault Audit",
+      "description": "Audits vault structure — finds broken links, naming inconsistencies, missing indices, orphaned files. Proposes reorganization plan.",
+      "version": "1.0.0",
+      "category": "analysis",
+      "tier": "core",
+      "files": ["SKILL.md", "references/examples.md"],
+      "size": "16KB",
+      "primary": false
+    },
+    {
+      "id": "graph",
+      "label": "Graph",
+      "description": "Analyzes knowledge graph — orphans, dangling links, clusters, dependency depth, staleness heatmap, cross-domain bridges.",
+      "version": "1.0.0",
+      "category": "analysis",
+      "tier": "core",
+      "files": ["SKILL.md", "scripts/vault-graph.py"],
+      "size": "28KB",
+      "primary": false
+    },
+    {
+      "id": "graduate",
+      "label": "Graduate",
+      "description": "Extracts ideas buried in transcripts and promotes them into standalone permanent modules.",
+      "version": "1.0.0",
+      "category": "mining",
+      "tier": "core",
+      "files": ["SKILL.md"],
+      "size": "8KB",
+      "primary": false
+    },
+    {
+      "id": "copy",
+      "label": "Copy",
+      "description": "Creates brand-aligned copy — ad variants, email templates, pitch blurbs, structured AI prompts, recruitment posts.",
+      "version": "1.0.0",
+      "category": "creation",
+      "tier": "core",
+      "files": ["SKILL.md", "references/examples.md"],
+      "size": "16KB",
+      "primary": false
+    },
+    {
+      "id": "learned",
+      "label": "Learned",
+      "description": "Turns recent learnings into a polished 'What I Learned' post ready for sharing. Reads session logs and transcripts.",
+      "version": "1.0.0",
+      "category": "creation",
+      "tier": "core",
+      "files": ["SKILL.md"],
+      "size": "8KB",
+      "primary": false
+    },
+    {
+      "id": "weekly-learnings",
+      "label": "Weekly Learnings",
+      "description": "Compiles the week's insights from session logs, transcripts, and module changes into an operational summary.",
+      "version": "1.0.0",
+      "category": "analysis",
+      "tier": "core",
+      "files": ["SKILL.md"],
+      "size": "8KB",
+      "primary": false
+    },
+    {
+      "id": "xdaily",
+      "label": "X Daily",
+      "description": "Takes X/Twitter posts and threads them into relevant vault modules. Classifies by project, finds related modules.",
+      "version": "1.0.0",
+      "category": "workflow",
+      "tier": "core",
+      "files": ["SKILL.md"],
+      "size": "8KB",
+      "primary": false
+    },
+    {
+      "id": "sync",
+      "label": "Sync",
+      "description": "Synchronizes knowledge between modular-context (CEO brain) and a secondary vault. Reads sync contract, detects desync.",
+      "version": "1.0.0",
+      "category": "workflow",
+      "tier": "core",
+      "files": ["SKILL.md"],
+      "size": "8KB",
+      "primary": false
+    },
+    {
+      "id": "playscript",
+      "label": "Playscript",
+      "description": "Analyzes your knowledge base through the Playscript framework — surfaces strategic angles, untapped opportunities, cross-project synergies.",
+      "version": "1.0.0",
+      "category": "analysis",
+      "tier": "core",
+      "files": ["SKILL.md", "references/personas/elon-musk.md", "references/personas/naval-ravikant.md", "references/personas/steve-jobs.md", "references/personas/marcus-aurelius.md", "references/personas/howard-roark.md"],
+      "size": "60KB",
+      "primary": false
+    },
+    {
+      "id": "ralph-prompt",
+      "label": "Ralph Prompt",
+      "description": "Interactive wizard for building structured prompts for the Ralph autonomous loop plugin.",
+      "version": "1.0.0",
+      "category": "automation",
+      "tier": "core",
+      "files": ["SKILL.md", "references/prompt-anatomy.md"],
+      "size": "12KB",
+      "primary": false
+    },
+    {
+      "id": "ralph-factory",
+      "label": "Ralph Factory",
+      "description": "Meta-prompt factory — generates 20 strategic Ralph prompts targeting CEO success factors per run.",
+      "version": "1.0.0",
+      "category": "automation",
+      "tier": "core",
+      "files": ["SKILL.md"],
+      "size": "12KB",
+      "primary": false
+    },
+    {
+      "id": "overnight",
+      "label": "Overnight",
+      "description": "Plans and executes chained Ralph loops as one continuous session with a queue file. For overnight batch processing.",
+      "version": "1.0.0",
+      "category": "automation",
+      "tier": "core",
+      "files": ["SKILL.md"],
+      "size": "12KB",
+      "primary": false
+    },
+    {
+      "id": "tasklist",
+      "label": "Tasklist",
+      "description": "Transforms weekly plan into actionable Claude Code session starters with objective, context files, and deliverables.",
+      "version": "1.0.0",
+      "category": "workflow",
+      "tier": "core",
+      "files": ["SKILL.md"],
+      "size": "8KB",
+      "primary": false
+    },
+    {
+      "id": "skill-creator",
+      "label": "Skill Creator",
+      "description": "Interactive guide for creating high-quality Claude Code skills (SKILL.md files). Templates, patterns, validation.",
+      "version": "1.0.0",
+      "category": "automation",
+      "tier": "core",
+      "files": ["SKILL.md", "references/yaml-reference.md", "references/patterns.md", "references/checklist.md"],
+      "size": "20KB",
+      "primary": false
+    }
+  ]
+}
