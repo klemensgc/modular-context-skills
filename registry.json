@@ -223,6 +223,17 @@
       "files": ["SKILL.md", "references/yaml-reference.md", "references/patterns.md", "references/checklist.md"],
       "size": "20KB",
       "primary": false
+    },
+    {
+      "id": "whatsapp-digest",
+      "label": "WhatsApp Digest",
+      "description": "Analyze WhatsApp groups — action items, blindspots, vault cross-reference, staleness detection. macOS only.",
+      "version": "1.0.0",
+      "category": "analysis",
+      "tier": "core",
+      "files": ["SKILL.md", "references/group-routing.md", "scripts/extract.py"],
+      "size": "28KB",
+      "primary": false
     }
   ]
 }
