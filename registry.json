@@ -66,9 +66,10 @@
       "version": "1.0.0",
       "category": "workflow",
       "tier": "core",
-      "files": ["SKILL.md"],
+      "files": ["COMMAND.md"],
       "size": "8KB",
-      "primary": false
+      "primary": false,
+      "type": "command"
     },
     {
       "id": "vault-audit",
