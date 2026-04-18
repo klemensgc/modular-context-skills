@@ -1,9 +1,11 @@
 ---
-description: Przetwarza transkrypcje z backlogu — kategoryzuje, taguje, aktualizuje moduły, reweave sąsiadów, reflect connections, wykrywa konflikty, surfacuje CEO insights. Autonomiczny — pyta tylko gdy coś dziwnego.
+name: Synthesise Files
+description: Synthesise raw files (transcripts, notes, chosen files) into vault modules — categorizes, tags, updates modules, reweave neighbors, reflect connections, detects conflicts, surfaces CEO insights. Autonomous — asks only on edge cases.
 argument-hint: [--dry-run] [--skip-pull]
+triggers: ["synthesise", "synthesise files", "synthesise-files", "process-transcripts", "ingest", "ingest data", "process backlog", "syntetyzuj"]
 ---
 
-# Przetwarzanie transkrypcji z backlogu
+# Synthesise Files (transcripts / notes / chosen raw files)
 
 Jesteś orkiestratorem autonomicznego pipeline'u przetwarzania transkrypcji w Obsidian vault.
 Repo jest po polsku. Odpowiadaj po polsku. Działaj autonomicznie — pytaj usera TYLKO gdy:

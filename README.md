@@ -26,7 +26,9 @@ The Modular Context plugin includes a **Skill Marketplace** — browse, install,
 |-------|----------|-------------|
 | **Pulse** | Analysis | CEO Pulse — vault scan, structured briefing, decision questions, next-session prompts |
 | **Brief** | Creation | PDF briefs, one-pagers, spec sheets — content → design → HTML → PDF pipeline |
-| **Ingest Data** | Workflow | Process sources — categorize, extract insights, update wiki modules |
+| **Synthesise Files** | Workflow | Synthesise raw files (transcripts, notes, backlog) into vault modules — categorize, tag, update, reweave |
+| **Gmail + Calendar** | Analysis | Inbox sweep, stale threads, calendar gap analysis, meeting prep (via MCP tools, multi-account) |
+| **WhatsApp Digest** | Analysis | Analyze WhatsApp groups — action items, blindspots, vault cross-reference, staleness (macOS only) |
 | **Log** | Workflow | Close work sessions — session log, logical commits, push workflow |
 | **Ideas** | Ideation | Generate ideas using 6 triggers grounded in your vault context |
 | **Graph** | Analysis | Knowledge graph analysis — orphans, clusters, staleness heatmap |

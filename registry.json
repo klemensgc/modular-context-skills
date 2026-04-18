@@ -12,7 +12,7 @@
       "tier": "core",
       "files": ["SKILL.md", "references/question-types.md"],
       "size": "16KB",
-      "primary": true
+      "primary": false
     },
     {
       "id": "brief",
@@ -23,13 +23,13 @@
       "tier": "core",
       "files": ["SKILL.md", "references/template-siebe-light.html", "references/template-siebe-dark.html", "references/template-rada-starcow.html", "references/css-templates.md", "references/examples.md"],
       "size": "84KB",
-      "primary": true
+      "primary": false
     },
     {
       "id": "process-transcripts",
-      "label": "Ingest Data",
-      "description": "Process new sources — categorize, extract insights, update wiki modules. Autonomous transcript processing pipeline.",
-      "version": "1.0.0",
+      "label": "Synthesise Files",
+      "description": "Synthesise raw files (transcripts, notes, backlog) into vault modules — categorizes, tags, updates, reweaves neighbors.",
+      "version": "1.1.0",
       "category": "workflow",
       "tier": "core",
       "files": ["COMMAND.md"],
@@ -233,7 +233,18 @@
       "tier": "core",
       "files": ["SKILL.md", "references/group-routing.md", "scripts/extract.py"],
       "size": "28KB",
-      "primary": false
+      "primary": true
+    },
+    {
+      "id": "gsuite-analysis",
+      "label": "Gmail + Calendar",
+      "description": "Gmail + Calendar analysis playbook — inbox sweeps, stale follow-ups, calendar gap analysis, meeting prep. Uses MCP tools, multi-account aware.",
+      "version": "1.0.0",
+      "category": "analysis",
+      "tier": "core",
+      "files": ["SKILL.md"],
+      "size": "12KB",
+      "primary": true
     }
   ]
 }
