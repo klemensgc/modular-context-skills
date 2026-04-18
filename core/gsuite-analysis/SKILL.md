@@ -1,13 +1,13 @@
 ---
 name: gsuite-analysis
-description: Gmail + Calendar analysis playbook — orchestrates MCP Google Workspace tools (gmail_search, gmail_modify_labels, calendar_freebusy, etc.) for inbox sweeps, stale follow-ups, calendar gap analysis, meeting prep. Writes insights to vault, does not auto-send.
-triggers: ["gmail", "gcal", "gsuite", "gmail analysis", "calendar analysis", "inbox sweep", "meeting prep", "free time", "catch up", "stale threads"]
-required-tools: ["mcp__google-workspace__gmail_search", "mcp__google-workspace__gmail_modify_labels", "mcp__google-workspace__gmail_draft", "mcp__google-workspace__gmail_send", "mcp__google-workspace__calendar_list_calendars", "mcp__google-workspace__calendar_list_events", "mcp__google-workspace__calendar_create_event", "mcp__google-workspace__calendar_update_event", "mcp__google-workspace__calendar_delete_event", "mcp__google-workspace__calendar_freebusy"]
+description: Google Workspace analysis playbook — orchestrates 25 MCP tools (Gmail, Calendar, Drive, Docs, Sheets, Slides) for inbox sweeps, stale follow-ups, calendar gap analysis, meeting prep, doc extraction, metric logging, deck prep. Writes insights to vault, does not auto-send.
+triggers: ["gmail", "gcal", "gsuite", "g-suite", "google workspace", "drive", "docs", "sheets", "slides", "inbox sweep", "meeting prep", "free time", "catch up", "stale threads"]
+required-tools: ["mcp__google-workspace__gmail_search", "mcp__google-workspace__gmail_modify_labels", "mcp__google-workspace__gmail_draft", "mcp__google-workspace__gmail_send", "mcp__google-workspace__calendar_list_calendars", "mcp__google-workspace__calendar_list_events", "mcp__google-workspace__calendar_create_event", "mcp__google-workspace__calendar_update_event", "mcp__google-workspace__calendar_delete_event", "mcp__google-workspace__calendar_freebusy", "mcp__google-workspace__drive_list_files", "mcp__google-workspace__drive_search", "mcp__google-workspace__drive_download_file", "mcp__google-workspace__drive_upload_file", "mcp__google-workspace__docs_read_doc", "mcp__google-workspace__docs_create_doc", "mcp__google-workspace__docs_update_doc", "mcp__google-workspace__sheets_list_sheets", "mcp__google-workspace__sheets_read_range", "mcp__google-workspace__sheets_write_range", "mcp__google-workspace__sheets_append_row", "mcp__google-workspace__sheets_create_spreadsheet", "mcp__google-workspace__slides_read_presentation", "mcp__google-workspace__slides_create_presentation", "mcp__google-workspace__slides_add_slide"]
 ---
 
-# Gmail + Calendar Analysis
+# Google Workspace Analysis
 
-Playbook using the Modular Context G-Suite MCP tools. Call this skill when you want to understand or act on your inbox + calendar state — NOT for sending emails blind or auto-scheduling.
+Playbook using the Modular Context G-Suite MCP tools (25 total across 6 Workspace products). Call this skill when you want to understand or act on your inbox, calendar, Drive files, Docs, Sheets, or Slides — NOT for sending emails blind or auto-scheduling.
 
 **Multi-account aware.** Every MCP tool accepts optional `account` parameter (email). When working across multiple Google accounts (e.g., `apollo@receptionos.com` + `k@receptionos.com` + `k@fundacjaedisona.pl`), always pass `account` explicitly. Omit `account` to use primary.
 
@@ -18,7 +18,7 @@ Playbook using the Modular Context G-Suite MCP tools. Call this skill when you w
 
 ---
 
-## Tools at your disposal (10)
+## Tools at your disposal (25)
 
 ### Gmail (4)
 - `gmail_search(query, maxResults?, includeBody?, account?)` — Gmail search syntax (`is:unread`, `from:X`, `after:YYYY-MM-DD`, `has:attachment`, etc.)
@@ -33,6 +33,29 @@ Playbook using the Modular Context G-Suite MCP tools. Call this skill when you w
 - `calendar_update_event(eventId, {summary?, start?, end?, ...}, sendUpdates?, calendarId?, account?)` — patch existing
 - `calendar_delete_event(eventId, calendarId?, sendUpdates?, account?)` — delete
 - `calendar_freebusy(timeMin, timeMax, calendars?[], account?)` — busy ranges per calendar
+
+### Drive (4)
+- `drive_list_files(query?, pageSize?, pageToken?, orderBy?, account?)` — list with Drive query syntax filter (e.g. `"mimeType = 'application/pdf' and name contains 'report'"`)
+- `drive_search(searchText, mimeType?, pageSize?, pageToken?, account?)` — full-text search across file content + names. Excludes trashed.
+- `drive_download_file(fileId, exportMimeType?, account?)` — Google-native files auto-exported as text; binary returned as base64
+- `drive_upload_file(name, content, mimeType?, encoding?, parentFolderId?, account?)` — create file; supports utf-8 / base64
+
+### Docs (3)
+- `docs_read_doc(documentId, account?)` — plain-text extraction (paragraphs + tables with tab separators)
+- `docs_create_doc(title, initialContent?, account?)` — new doc, returns documentId + webViewLink
+- `docs_update_doc(documentId, content, mode, account?)` — `mode: "append"` (at end) or `mode: "replace"` (wipe body + insert)
+
+### Sheets (5)
+- `sheets_list_sheets(spreadsheetId, account?)` — spreadsheet metadata + sheet tabs
+- `sheets_read_range(spreadsheetId, range, majorDimension?, valueRenderOption?, account?)` — A1 notation read, returns 2D string array
+- `sheets_write_range(spreadsheetId, range, values[][], majorDimension?, valueInputOption?, account?)` — overwrite range; `USER_ENTERED` parses formulas/dates
+- `sheets_append_row(spreadsheetId, range, values[][], valueInputOption?, account?)` — append row(s) to end of data region
+- `sheets_create_spreadsheet(title, sheetTitles?, account?)` — new spreadsheet with optional initial tab titles
+
+### Slides (3)
+- `slides_read_presentation(presentationId, account?)` — metadata + plain-text summary per slide
+- `slides_create_presentation(title, account?)` — new presentation
+- `slides_add_slide(presentationId, layout?, insertionIndex?, account?)` — layouts: BLANK / TITLE / TITLE_AND_BODY / SECTION_HEADER / TITLE_AND_TWO_COLUMNS / CAPTION_ONLY
 
 ---
 

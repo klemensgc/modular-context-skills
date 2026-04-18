@@ -1,0 +1,140 @@
+name: Validate Skills Registry
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
+      - name: Validate registry.json is valid JSON
+        run: |
+          if ! jq empty registry.json; then
+            echo "❌ registry.json is not valid JSON"
+            exit 1
+          fi
+          echo "✅ registry.json is valid JSON"
+
+      - name: Check all skills have required v2 fields
+        run: |
+          missing=$(jq '[.skills[] | select(.stars == null or .category == null or .scope == null or .difficulty == null or .value == null or .requires == null)] | length' registry.json)
+          if [ "$missing" -gt "0" ]; then
+            echo "❌ $missing skills missing required fields (stars, category, scope, difficulty, value, requires)"
+            jq '.skills[] | select(.stars == null or .category == null or .scope == null or .difficulty == null or .value == null or .requires == null) | .id' registry.json
+            exit 1
+          fi
+          echo "✅ All skills have required v2 fields"
+
+      - name: Check all skill folders exist in core/
+        run: |
+          missing=0
+          for id in $(jq -r '.skills[].id' registry.json); do
+            if [ ! -d "core/$id" ]; then
+              echo "❌ Missing folder: core/$id (referenced in registry)"
+              missing=$((missing + 1))
+            fi
+          done
+          if [ $missing -gt 0 ]; then
+            echo "❌ $missing skill folders missing"
+            exit 1
+          fi
+          echo "✅ All $(jq '.skills | length' registry.json) skill folders present"
+
+      - name: Check categories are valid
+        run: |
+          valid_categories="analyze capture create maintain automate"
+          invalid=$(jq -r '.skills[] | "\(.id):\(.category)"' registry.json | awk -F: -v valid="$valid_categories" '
+            BEGIN { split(valid, arr, " "); for (i in arr) valid_cat[arr[i]] = 1 }
+            { if (!($2 in valid_cat)) print $0 }
+          ')
+          if [ -n "$invalid" ]; then
+            echo "❌ Invalid category values:"
+            echo "$invalid"
+            exit 1
+          fi
+          echo "✅ All category values valid (analyze/capture/create/maintain/automate)"
+
+      - name: Check scope values valid
+        run: |
+          invalid=$(jq -r '.skills[] | select(.scope != "universal" and .scope != "native-mc") | "\(.id):\(.scope)"' registry.json)
+          if [ -n "$invalid" ]; then
+            echo "❌ Invalid scope values:"
+            echo "$invalid"
+            exit 1
+          fi
+          echo "✅ All scope values valid (universal/native-mc)"
+
+      - name: Check difficulty values valid
+        run: |
+          invalid=$(jq -r '.skills[] | select(.difficulty != "learner" and .difficulty != "operator" and .difficulty != "expert") | "\(.id):\(.difficulty)"' registry.json)
+          if [ -n "$invalid" ]; then
+            echo "❌ Invalid difficulty values:"
+            echo "$invalid"
+            exit 1
+          fi
+          echo "✅ All difficulty values valid (learner/operator/expert)"
+
+      - name: Check value ratings valid
+        run: |
+          invalid=$(jq -r '.skills[] | select(.value != "low" and .value != "medium" and .value != "high") | "\(.id):\(.value)"' registry.json)
+          if [ -n "$invalid" ]; then
+            echo "❌ Invalid value ratings:"
+            echo "$invalid"
+            exit 1
+          fi
+          echo "✅ All value ratings valid (low/medium/high)"
+
+      - name: Check stars in 1-5 range
+        run: |
+          invalid=$(jq -r '.skills[] | select(.stars < 1 or .stars > 5) | "\(.id):\(.stars)"' registry.json)
+          if [ -n "$invalid" ]; then
+            echo "❌ Stars outside 1-5 range:"
+            echo "$invalid"
+            exit 1
+          fi
+          echo "✅ All stars in 1-5 range"
+
+      - name: Check requires[] skill IDs exist in registry
+        run: |
+          all_ids=$(jq -r '.skills[].id' registry.json | tr '\n' ' ')
+          known_flags="vault-structure gsuite-connected whatsapp-macos git-initialized python3"
+          broken=0
+          for skill_id in $(jq -r '.skills[].id' registry.json); do
+            for req in $(jq -r --arg id "$skill_id" '.skills[] | select(.id == $id) | .requires[]' registry.json); do
+              # Check if it's a valid skill id OR a known flag
+              if ! echo "$all_ids" | grep -qw "$req" && ! echo "$known_flags" | grep -qw "$req"; then
+                echo "❌ $skill_id.requires contains unknown: $req"
+                broken=$((broken + 1))
+              fi
+            done
+          done
+          if [ $broken -gt 0 ]; then
+            exit 1
+          fi
+          echo "✅ All requires[] entries reference known skills or flags"
+
+      - name: Summary
+        if: success()
+        run: |
+          echo ""
+          echo "📊 Registry Summary"
+          echo "=================="
+          echo "Total skills: $(jq '.skills | length' registry.json)"
+          echo ""
+          echo "By category:"
+          jq -r '.skills | group_by(.category) | .[] | "  \(.[0].category): \(length)"' registry.json
+          echo ""
+          echo "By scope:"
+          jq -r '.skills | group_by(.scope) | .[] | "  \(.[0].scope): \(length)"' registry.json
+          echo ""
+          echo "Primary skills: $(jq '[.skills[] | select(.primary == true)] | length' registry.json)"
+          echo ""
+          echo "✅ All validation checks passed"
