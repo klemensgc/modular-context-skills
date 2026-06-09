@@ -1,6 +1,6 @@
 {
-  "version": "2.0.0",
-  "updated": "2026-04-18",
+  "version": "2.1.0",
+  "updated": "2026-06-09",
   "source": "https://github.com/klemensgc/modular-context-skills",
   "schemaVersion": 2,
   "categories": {
@@ -15,7 +15,8 @@
     "gsuite-connected": "Google Workspace MCP configured (~/.modular-context/mcp-google/accounts-index.json exists)",
     "whatsapp-macos": "macOS with WhatsApp.app installed",
     "git-initialized": "Vault is a git repository",
-    "python3": "Python 3 available in PATH"
+    "python3": "Python 3 available in PATH",
+    "clickup-connected": "ClickUp personal API token configured (~/.modular-context/clickup/credentials.json exists)"
   },
   "skills": [
     {
@@ -387,6 +388,54 @@
       "value": "medium",
       "scope": "universal",
       "requires": []
+    },
+    {
+      "id": "review-core",
+      "label": "Review Core (lib)",
+      "description": "Internal shared library for the *-review family — ClickUp client (multi-workspace my-tasks, funnel, v3 Docs/planning), normalized Item model, channel adapters. Not user-triggered; required by clickup-review and comms-review.",
+      "version": "1.0.0",
+      "category": "automate",
+      "tier": "core",
+      "files": ["SKILL.md", "lib/clickup_client.py", "lib/model.py", "lib/clickup_adapter.py", "references/credentials.example.json"],
+      "size": "14KB",
+      "primary": false,
+      "stars": 3,
+      "difficulty": "expert",
+      "value": "medium",
+      "scope": "universal",
+      "requires": ["clickup-connected", "python3"]
+    },
+    {
+      "id": "clickup-review",
+      "label": "ClickUp Review",
+      "description": "Review a CRM / sales-funnel list in ClickUp — count per stage, deals near close, stale leads, value sums. Stages read live from the list, so it works with any funnel. Read-only by default. Requires review-core.",
+      "version": "1.0.0",
+      "category": "analyze",
+      "tier": "core",
+      "files": ["SKILL.md", "scripts/audit.py"],
+      "size": "10KB",
+      "primary": true,
+      "stars": 4,
+      "difficulty": "operator",
+      "value": "high",
+      "scope": "universal",
+      "requires": ["clickup-connected", "python3"]
+    },
+    {
+      "id": "comms-review",
+      "label": "Comms Review",
+      "description": "Cross-channel owner overview — aggregates ClickUp (your tasks across workspaces + funnel + planning week), WhatsApp groups and Gmail into one report: how the company is doing + what belongs to you. Read-only. Requires review-core + whatsapp-digest + Google Workspace MCP.",
+      "version": "1.0.0",
+      "category": "analyze",
+      "tier": "core",
+      "files": ["SKILL.md"],
+      "size": "9KB",
+      "primary": true,
+      "stars": 5,
+      "difficulty": "expert",
+      "value": "high",
+      "scope": "universal",
+      "requires": ["clickup-connected", "whatsapp-macos", "gsuite-connected", "python3"]
     }
   ]
 }

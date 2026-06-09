@@ -1,8 +1,23 @@
 # Modular Context Skills — Curated Library
 
-> **23 opinionated Claude Code workflows** for Obsidian-native knowledge work. Stars rated. Prerequisites explicit. Install via plugin.
+> **26 opinionated Claude Code workflows** for Obsidian-native knowledge work. Stars rated. Prerequisites explicit. Install via plugin.
 
 Designed for users of the [Modular Context plugin](https://github.com/klemensgc/modular-context-obsidian-plugin). Each skill is a self-contained playbook — not a tip, not a template.
+
+---
+
+## 🏢 The AI Company Stack
+
+This library isn't a pile of tips — it's a **whole AI company stack** built on one workflow: your vault is the brain, Claude Code is the operator, and each layer plugs into the next.
+
+| Layer | What it does | Skills |
+|-------|--------------|--------|
+| 🎙️ **Notetaker** | Turn raw transcripts, calls and tweets into structured, tagged knowledge | `process-transcripts`, `xdaily`, `graduate` |
+| 🧠 **Self-healing Knowledge Base** | The vault keeps itself current — reweaves stale modules, fixes links, audits structure, syncs sibling vaults | `reweave`, `vault-audit`, `graph`, `sync`, `pulse` |
+| 📡 **Communication layer** | One read across mail, WhatsApp and Google Workspace — what's happening and what belongs to you | `comms-review`, `whatsapp-digest`, `gsuite-analysis` |
+| 📊 **CRM / ops** | Ready skills that connect to ClickUp — review your sales funnel and pull your weekly plan straight from the workspace | `clickup-review`, `review-core`, `tasklist` |
+
+Each layer is independently useful; together they run a one-person company on autopilot.
 
 ---
 
@@ -10,12 +25,12 @@ Designed for users of the [Modular Context plugin](https://github.com/klemensgc/
 
 ```
 ╔══════════════════════════════════════════════════════════════════════════════╗
-║      🦀  MODULAR CONTEXT SKILLS v2.0 — 23 CURATED WORKFLOWS                 ║
+║      🦀  MODULAR CONTEXT SKILLS v2.1 — 26 CURATED WORKFLOWS                 ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
 
  ┌───────────────┬───────────────┬───────────────┬───────────────┬───────────────┐
  │   CAPTURE     │   ANALYZE     │   CREATE      │   MAINTAIN    │   AUTOMATE    │
- │     (3)       │     (7)       │     (5)       │     (4)       │     (4)       │
+ │     (3)       │     (9)       │     (5)       │     (4)       │     (5)       │
  ├───────────────┼───────────────┼───────────────┼───────────────┼───────────────┤
  │  process-     │  pulse        │  brief        │  log          │  ralph-prompt │
  │  transcripts  │  ⭐⭐⭐⭐⭐   │  ⭐⭐⭐⭐⭐   │  ⭐⭐⭐⭐     │  ⭐⭐⭐⭐     │
