@@ -105,7 +105,7 @@ jobs:
       - name: Check requires[] skill IDs exist in registry
         run: |
           all_ids=$(jq -r '.skills[].id' registry.json | tr '\n' ' ')
-          known_flags="vault-structure gsuite-connected whatsapp-macos git-initialized python3"
+          known_flags=$(jq -r '.requiresFlags | keys | join(" ")' registry.json)
           broken=0
           for skill_id in $(jq -r '.skills[].id' registry.json); do
             for req in $(jq -r --arg id "$skill_id" '.skills[] | select(.id == $id) | .requires[]' registry.json); do
