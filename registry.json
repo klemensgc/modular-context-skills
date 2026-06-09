@@ -419,7 +419,7 @@
       "difficulty": "operator",
       "value": "high",
       "scope": "universal",
-      "requires": ["clickup-connected", "python3"]
+      "requires": ["clickup-connected", "python3", "review-core"]
     },
     {
       "id": "comms-review",
@@ -435,7 +435,7 @@
       "difficulty": "expert",
       "value": "high",
       "scope": "universal",
-      "requires": ["clickup-connected", "whatsapp-macos", "gsuite-connected", "python3"]
+      "requires": ["clickup-connected", "whatsapp-macos", "gsuite-connected", "python3", "review-core"]
     }
   ]
 }
