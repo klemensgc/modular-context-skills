@@ -85,8 +85,8 @@ Szukaj w przeczytanych danych:
 **Unexplored territories:**
 - Tematy poruszone w transkrypcjach ale nieobecne w modulach
 - Pytania otwarte (`Open Questions` w index files) od dawna bez odpowiedzi
-- Pliki `status: stub` lub `status: needs-update` — zaniedbane obszary
-- Stare daty `updated:` (>4 tygodnie) w strategicznych plikach
+- Pliki `status: draft` lub `status: needs-update` — zaniedbane obszary
+- Moduły stale wg git log (`modul` >60 dni, huby >7 dni) w strategicznych obszarach
 
 **Asymetric opportunities (high leverage):**
 - Male dzialania ktore moga dac duzy efekt
@@ -353,7 +353,7 @@ Uzyj `AskUserQuestion`:
 ### Po wyborze
 
 Dla kazdego wybranego play:
-1. Przeczytaj WSZYSTKIE powiazane pliki z repo (evidence + depends-on)
+1. Przeczytaj WSZYSTKIE powiazane pliki z repo (evidence + wiki-linki z tresci)
 2. Rozwin play do pelnego planu z konkretnymi deliverables
 3. Zaproponuj NOWE pliki .md ktore powinny powstac
 
@@ -405,7 +405,7 @@ W planie:
 4. Estymacja: ktore pliki wymagaja dodatkowego czytania z repo
 
 Po zaakceptowaniu planu: twórz pliki jeden po drugim.
-Po kazdym pliku: aktualizuj `updated:` w powiazanych index files.
+Po kazdym pliku: dopisz wiki-link do powiazanych index files (`updated:` stampuje pre-commit — nie wpisuj go recznie).
 
 ---
 

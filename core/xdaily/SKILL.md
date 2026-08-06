@@ -93,7 +93,7 @@ Proposed action:
 
 | Akcja | Kiedy | Co robi |
 |-------|-------|---------|
-| **Add to sources** | Tweet potwierdza/rozszerza existing module | Dodaj do `sources:` w frontmatter |
+| **Add link** | Tweet potwierdza/rozszerza existing module | Wplec wiki-link `[[x-post-YYYY-MM-DD]]` w treść modułu (`sources:` nie istnieje poza `-summary.md`) |
 | **Update module** | Tweet zawiera nową informację relevant do modułu | Dodaj paragraf/bullet do modułu |
 | **Create note** | Tweet to standalone insight bez dobrego modułu | Stwórz `_workspace/{YYYY-MM}/wN/x-{date}-{topic}.md` |
 | **Add to transcript** | Tweet to conversation/thread z wartością | Stwórz summary w `_transcripts/` |
@@ -113,12 +113,22 @@ Opcje (multiSelect jeśli wiele):
 
 Dla zaakceptowanych:
 
-1. **Add to sources:** Edytuj frontmatter modułu — dodaj `[[x-post-YYYY-MM-DD]]` do `sources:`
-2. **Update module:** Dodaj content z tweetów jako nową sekcję/bullet. Oznacz: `(źródło: X post, [data])`
-3. **Create note:** Użyj file-standard template. Status: `draft`. Cadence: `tactical`.
+1. **Add link:** Wplec `[[x-post-YYYY-MM-DD]]` w treść `## Stan` modułu — nie w frontmatter.
+2. **Update module:** Wplec fakt z tweetów w `## Stan` (bez datowanych dopisków — datowane wpisy tylko w `## Log`).
+3. **Create note:** dom `_workspace/{YYYY-MM}/wN/` → `type: log`. Frontmatter typu `log` wymaga
+   `data:` i `agent:` (`_schemas/log.yaml`) — bez nich `schema_lint.py` daje 2 FAIL i blokuje commit:
+   ```markdown
+   ---
+   title: X post — {temat} — {YYYY-MM-DD}
+   type: log
+   data: {YYYY-MM-DD}
+   agent: /xdaily
+   ---
+   ```
+   Nie dopisuj `status:` ani `updated:` — pierwsze nie jest polem typu `log`, drugie stampuje pre-commit.
 4. **Add to transcript:** Stwórz summary w odpowiedniej kategorii `_transcripts/`.
 
-Każdą edycję rób przez Edit tool (nie nadpisuj całego pliku). Zaktualizuj `updated:` w frontmatter.
+Każdą edycję rób przez Edit tool (nie nadpisuj całego pliku). `updated:` stampuje pre-commit — nie wpisuj ręcznie.
 
 ### Krok 7: Podsumuj
 
@@ -129,7 +139,7 @@ Processed: [N] tweets/posts
 
 Actions taken:
 - [[module1]] — updated (added [topic])
-- [[module2]] — added to sources
+- [[module2]] — dodany wiki-link do [[x-post-{data}]]
 - _workspace/...x-{date}-{topic}.md — created (standalone note)
 - [N] skipped
 

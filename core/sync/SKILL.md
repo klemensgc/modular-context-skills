@@ -89,8 +89,9 @@ Następnie skanuj kluczowe pliki w obu repo (parallel reads):
 ### Porównanie
 
 Dla każdej domeny z contract Ownership Table:
-1. Sprawdź `updated:` w pliku Source of Truth
-2. Sprawdź `updated:` w pliku konsumenta
+1. Ustal datę pliku Source of Truth — **plik MC:** `git log -1 --format=%ad --date=short -- <plik>`
+   (kanon świeżości w MC to git, nie frontmatter); **plik AV:** pole `updated:` z frontmattera
+2. Ustal datę pliku konsumenta tą samą metodą wg repo, w którym leży
 3. Jeśli SoT nowszy niż konsument → **DESYNC**
 4. Jeśli treści się różnią (nazwiska, statusy, daty) → **CONTRADICTION**
 
@@ -173,21 +174,39 @@ Po akceptacji:
 Dla każdej zatwierdzonej propozycji:
 1. Przeczytaj plik docelowy
 2. Edytuj treść
-3. Zaktualizuj `updated:` w frontmatter
+3. `updated:`:
+   - **plik w MC** — stampuje pre-commit, nie wpisuj ręcznie
+   - **plik w apollo-vault** — wpisz datę ręcznie. AV nie ma instalacji MC (brak `.githooks/`,
+     brak `_schemas/`, `core.hooksPath` pusty), więc nikt tam nic nie ostampuje, a `updated:`
+     jest jedynym sygnałem desyncu, który czyta FAZA 1
 
 ### 3b. Regeneruj Strategy Brief
 
-Jeśli były zmiany MC → AV, regeneruj `apollo-vault/0-system/strategy-brief.md`:
+Jeśli były zmiany MC → AV, regeneruj `apollo-vault/0-system/strategy-brief.md`.
 
-```yaml
+**apollo-vault ma własny schemat frontmattera — nie narzucaj mu enumów MC.** Kanon pól tego pliku
+to `_claude/7-skill-references/apollo-sync-contract.md` + stan pliku w AV (`type: bridge`,
+`status: active`). Typy i statusy z `_schemas/` obowiązują wyłącznie w MC.
+
+```markdown
 ---
 title: "Strategy Brief — from modular-context"
-updated: [dzisiaj]
-generated-by: /sync skill
-source: modular-context
+updated: [dzisiaj YYYY-MM-DD]
+status: active
+type: bridge
+generated-by: /sync skill (modular-context)
+source: modular-context/2_apolonia/
 do-not-edit-manually: true
 ---
+
+> Ten plik jest generowany automatycznie przez `/sync` w modular-context.
+> Apollo agents: czytaj read-only. NIGDY nie modyfikuj ręcznie.
+> Źródło prawdy: modular-context (CEO brain).
 ```
+
+Ostrzeżenie trzymasz **w obu miejscach**: jako pole `do-not-edit-manually: true` (sprawdzalne
+maszynowo przez agentów Apollo) i jako blockquote (widoczny w renderze Obsidiana). Komentarz HTML
+nie zastępuje żadnego z nich — jest niewidoczny i nieparsowalny.
 
 Sekcje:
 - **Current Priorities** — z najnowszego quest-board
@@ -213,7 +232,8 @@ Dodaj wpis do `4_apollo/6-operations/sync-log.md`:
 ### 3d. Walidacja
 
 Po wykonaniu:
-1. Sprawdź `updated:` we wszystkich zmodyfikowanych plikach
+1. Pliki AV: sprawdź, że `updated:` ma dzisiejszą datę (ręcznie — AV nie ma stampingu).
+   Pliki MC: nie dotykaj `updated:`, sprawdź lint (`schema_lint.py <plik>` → 0 FAIL)
 2. Potwierdź brak otwartych contradictions
 3. Wyświetl podsumowanie
 

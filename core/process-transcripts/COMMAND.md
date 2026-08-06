@@ -162,12 +162,12 @@ Dla każdego modułu (HIGH → MEDIUM → LOW):
 
 1. Przeczytaj moduł docelowy (CAŁY plik)
 2. Przeczytaj źródłowy transkrypt (summary + pełny)
-3. Sprawdź `depends-on:` — czy powiązane pliki też wymagają zmian
+3. Sprawdź wiki-linki w treści + krawędzie (`owner:`, `osoby:`, `dotyczy:`) — czy powiązane pliki też wymagają zmian
 4. Edytuj moduł:
-   - Dodaj nowe informacje (NIE nadpisuj istniejących)
-   - Dodaj transkrypt do `sources:` w frontmatter
-   - Zaktualizuj `updated:` na dziś
-   - Zaktualizuj `status:` jeśli potrzeba
+   - Wplataj nowe fakty w `## Stan` (NIE nadpisuj istniejących, bez datowanych dopisków)
+   - Wiki-link do transkryptu w treści — `sources:` żyje wyłącznie w `_transcripts/**-summary.md`
+   - `updated:` stampuje pre-commit — nie wpisuj ręcznie
+   - Zaktualizuj `status:` jeśli potrzeba (stable | draft | needs-update | archive)
 5. Zastosuj auto-fixy z consistency-checker (wiki-links, statusy)
 
 **Pytaj usera TYLKO jeśli:**
@@ -177,8 +177,8 @@ Dla każdego modułu (HIGH → MEDIUM → LOW):
 ### 3.3 Safety checks
 
 Po każdej edycji weryfikuj:
-- updated: zaktualizowane?
-- sources: zawiera nowy transkrypt?
+- fakt trafił do `## Stan` (nie jako datowany dopisek)?
+- wiki-link do transkryptu obecny w treści?
 - Nie nadpisano nowszych danych?
 
 ### 3.4 Tracking dla Reweave
@@ -231,12 +231,12 @@ Dla każdego modułu z HIGH priority (max 8, w kolejności score descending):
    - Agent Traversal Check: "Jeśli agent podąża za linkiem, jaką decyzję podejmie?"
    - Sharpening Test: "Czy dodanie info wyostrza czy rozmywa przekaz?"
 4. **Określ Reweave Action** (1 z 5):
-   - **ADD CONNECTIONS** → dodaj wiki-links, depends-on
-   - **REWRITE CONTENT** → zaktualizuj fakty, statusy, liczby
+   - **ADD CONNECTIONS** → dodaj wiki-links w treści (i krawędzie `owner:` / `osoby:` / `dotyczy:` gdy pasują)
+   - **REWRITE CONTENT** → zaktualizuj fakty, statusy, liczby (liczby operacyjne jako pointer: `N (stan na RRRR-MM-DD, kanon: X)`)
    - **SHARPEN** → usuń hedging, potwierdź zrealizowane
    - **SPLIT** → FLAG dla usera, nie wykonuj automatycznie
    - **CHALLENGE** → STOP, pokaż sprzeczność, pytaj usera
-5. **Zastosuj** zmiany + zaktualizuj frontmatter (updated:, sources:, depends-on:)
+5. **Zastosuj** zmiany — treść w `## Stan`, linki w treści; frontmattera nie dotykasz poza `status:` (`updated:` stampuje pre-commit)
 6. **Zaloguj** co zrobiłeś (moduł, action, opis — do raportu w 3.5.4)
 
 Dla MEDIUM priority: zapisz do `_claude/5-backlog/reweave-queue.md` (tabela Pending).
@@ -251,8 +251,8 @@ Dla LOW priority: zaloguj w session logu (bez akcji).
 Dla KAŻDEGO reweaved modułu:
 
 1. **Cold-Read Test** — przeczytaj tytuł i pierwszą sekcję. Czy reszta modułu jest przewidywalna z kontekstu? Jeśli treść odbiega od oczekiwań → potencjalna inkoherencja.
-2. **Schema Check** — frontmatter kompletny? `updated:` dzisiejsze? `depends-on:` używa `[[]]`? `sources:` aktualne?
-3. **Neighbor Coherence** — przeczytaj 1 moduł z `depends-on:`. Czy nadal się zgadzają na fakty?
+2. **Schema Check** — `type:` obecny (lub rozstrzygalny z globa)? `status:` w enumie? Zero pól legacy (`cadence`/`audience`/`depends-on`/`sources`)? Wiki-linki się rozwiązują?
+3. **Neighbor Coherence** — przeczytaj 1 moduł z wiki-linków w treści. Czy nadal się zgadzają na fakty?
 
 Jeśli weryfikacja FAIL → cofnij zmiany w module, dodaj do `reweave-queue.md` z notatką "verification failed, needs human review".
 
@@ -333,7 +333,7 @@ Szukaj cross-project connections i synthesis opportunities.
    - Przeczytaj target module
    - Dodaj wiki-link inline w odpowiednim miejscu (preferuj prose, nie "See also")
    - Jeśli bidirectional → dodaj reverse link
-   - Zaktualizuj `updated:` na dziś
+   - `updated:` stampuje pre-commit — nie wpisuj ręcznie
 
 2. **Synthesis Opportunities** — dla każdej wykrytej:
    - **NIE** twórz nowych modułów
@@ -359,7 +359,7 @@ REFLECT: X nowych połączeń dodanych, Y synthesis opportunities, Z index updat
 
 ### 5.2 Session log
 
-Stwórz session log w `_claude/4-sessions/2026-02/`:
+Stwórz session log w `_claude/4-sessions/{YYYY-MM}/` (bieżący miesiąc):
 - Przeczytaj szablon: `_claude/2-templates/session-log.md`
 - Wypełnij: data, zmodyfikowane pliki, decyzje, zmiany
 

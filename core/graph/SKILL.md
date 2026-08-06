@@ -24,6 +24,11 @@ python3 .claude/skills/graph/scripts/vault-graph.py . [mode]
 
 Modes: `full` (default), `orphans`, `dangling`, `clusters`, `depth`, `staleness`, `bridges`
 
+Skanowane drzewa: `1_receptionOS/`, `2_apolonia/`, `3_fte/`, `4_apollo/`, `_culture/`,
+`osoby/`, `_sales/`, `_events/` (stała `GRAPH_DIRS` w skrypcie). `_events/` wchodzi tylko
+jako źródło krawędzi (`owner:`/`osoby:`/`dotyczy:`) — jest write-once, więc nie liczy się
+ani do orphanów, ani do staleness.
+
 Wynik = JSON. Sformatuj go w czytelny raport po polsku.
 
 ---
@@ -53,24 +58,28 @@ Jeśli user nie podał trybu, uruchom `full`.
 ### Stats (zawsze na górze)
 
 ```
-VAULT GRAPH: X modułów, Y krawędzi
-Domeny: ROS (A), Apolonia (B), Fundacja (C), Culture (D)
-depends-on: X plików, sources: Y plików
+VAULT GRAPH: X plików w grafie, Y krawędzi
+Domeny: ROS (A), Apolonia (B), Fundacja (C), Culture (D), Osoby (E), Sales (F), Events (G)
+Typy: modul (N), deal (N), osoba (N), event (N) — z globa: N, bez typu: N
 ```
 
-### Orphans (moduły bez incoming links)
+Jeśli `legacy_fields` jest niepuste — dopisz linijkę „Dług legacy: `depends-on` N plików,
+`sources` N, `cadence` N". To pola usunięte z kanonu 2.0; niezerowa liczba = do sprzątnięcia
+(`sources:` legalne wyłącznie w `_transcripts/**-summary.md`, których graf nie skanuje).
+
+### Orphans (pliki bez incoming links)
 
 ```
-ORPHANS: X modułów bez żadnych incoming links
+ORPHANS: X plików bez żadnych incoming links
 
 Prawdziwe orphans (moduły z treścią, nie-styleguide):
-- ścieżka (domain, status, updated)
+- ścieżka (domain, type, status, last_change)
 
-Styleguide/asset orphans (oczekiwane, nowe pliki):
+Oczekiwane (nowe pliki, drzewa celowo niezalinkowane jak _culture/team-private/):
 - [lista]
 ```
 
-Rozróżniaj prawdziwych orphanów (moduły które POWINNY być połączone) od oczekiwanych (np. nowo zaimportowane styleguide pliki).
+Rozróżniaj prawdziwych orphanów (moduły które POWINNY być połączone) od oczekiwanych (np. nowo zaimportowane styleguide pliki, karty prywatne). Skrypt sam pomija indeksy, encje write-once (`event`/`spotkanie`/`log`) i `status: archive` — brak linków nie jest tam długiem. `last_change` to ta sama świeżość co w staleness (git, bez commitów `Meta: true`), nie frontmatterowe `updated:`.
 
 ### Dangling Links (wiki-links do nieistniejących plików)
 
@@ -95,29 +104,67 @@ TOP 15 MOST CONNECTED:
 | # | Moduł | Out | In | Total | Domain |
 ```
 
-### Depth
+### Depth (LEGACY)
+
+Tryb liczy łańcuchy po `depends-on:` — polu **usuniętym z kanonu 2.0**. W posprzątanym
+vaulcie `files_with_depends_on` = 0, więc sekcja jest pusta z definicji: **wtedy jej nie
+drukuj**, napisz jedną linijkę „depth: brak `depends-on:` w vaulcie (pole poza kanonem)".
+Raportuj tylko gdy licznik > 0 — i wtedy jako dług do usunięcia, nie jako strukturę.
 
 ```
-DEPENDENCY DEPTH: max X poziomów
+DEPENDENCY DEPTH (legacy depends-on): max X poziomów, N plików z depends-on
 Distribution: [0: A, 1: B, 2: C, ...]
 Cycles: [lista jeśli są]
 
 Najgłębsze łańcuchy:
-- moduł (depth X) → depends-on → depends-on → ...
+- moduł (depth X) → [[cel]] → [[cel]] → ...
 ```
 
 ### Staleness Heatmap
 
+Świeżość liczona **z gita, nie z frontmattera**: `last_change` = data ostatniego commita
+dotykającego pliku, z pominięciem commitów z trailerem `Meta: true` (batche mechaniczne —
+sweep, rename, lint-fix — nie odświeżają wiedzy). Kaskada źródeł (`last_change_source`):
+
+1. `git` — kanon.
+2. `frontmatter` — git nie zna pliku. Dwa przypadki: plik jeszcze niecommitowany **albo**
+   plik, którego jedyne commity to batche `Meta: true`. W tym drugim batch szedł z
+   `MC_SKIP_STAMP=1`, więc `updated:` bywa **starsze** niż faktyczne powstanie pliku —
+   traktuj tę datę jako dolne oszacowanie, nie jako stamp.
+3. `mtime` — vault nie jest repo gitowym; leci ostrzeżenie w `warnings` i na stderr.
+
+Budżet dni (`budget_source`): **hub 7d** (whitelist `HUBS` — wygrywa z typem) · `modul` 60d ·
+`osoba` 180d · `deal` 30d **tylko w `_sales/pipeline/active/`** · brak rozstrzygalnego typu 60d.
+Typ bierze się z jawnego `type:`, a przy jego braku z globa `_schemas/map.yaml` →
+`default-type` (`type_source`: `frontmatter` / `glob`). Progi to stałe na górze
+`vault-graph.py` (`HUBS`, `HUB_STALENESS_DAYS`, `TYPE_STALENESS_DAYS`, `DEAL_ACTIVE_PREFIX`) —
+tam je zmieniasz, nie w treści plików. Muszą się zgadzać z `_claude/9-automation/freshness.py`,
+bo inaczej digest SessionStart i raport grafu mówią co innego.
+
+**Poza sygnałem** (pole `excluded_from_staleness`, nie wchodzi do rankingu ani do średnich):
+`status: archive`, drzewa wygaszone (`4_apollo/**`), encje write-once (`spotkanie`/`event`/`log`),
+deale spoza `pipeline/active/`, ścieżki zmapowane w map.yaml na `null` (`_workspace`, `_claude`,
+`_archive`). Nie filtrujesz tego ręcznie po fakcie — skrypt liczy to zanim posortuje.
+
+`staleness_ratio` = `staleness_days / budget_days`, `priority_score` = ratio × incoming links.
+
 ```
-STALENESS HEATMAP: avg X ratio, avg Y dni, avg Z incoming links
+STALENESS HEATMAP: N plików w rankingu (M poza sygnałem)
+avg X ratio, avg Y dni, avg Z incoming links
+Źródło świeżości: git (N) / frontmatter (M) / mtime (K)
+Per typ: hub A/B stale · modul A/B · osoba A/B · deal A/B
 
 TOP 30 (staleness ratio x connectivity):
 Kolor wg ratio: ✅ <0.5 fresh | 🟡 0.5-1.0 aging | 🟠 1.0-2.0 stale | 🔴 >2.0 critical
 
-| # | Score | Ratio | Cadence | Dni | Links | Moduł | Domain | Status |
+| # | Score | Ratio | Typ | Budżet | Dni | Links | Moduł | Domain | Status |
 ```
 
-Flaguj moduły z ratio > 1.0 jako reweave candidates.
+Huby ze `stale_hubs` wypisz **osobno, na górze sekcji** — 7-dniowy budżet znaczy, że każdy
+z nich to zadanie na dziś, nie pozycja w długim rankingu. Poza tym flaguj wszystko z
+ratio > 1.0 jako reweave candidates. Jeśli `warnings` jest niepuste (brak gita → mtime,
+albo ścieżki gita nie pasują do vaulta), powiedz to wprost — wtedy staleness jest zaniżona
+i nie ufaj rankingowi.
 
 ### Bridges
 
@@ -138,11 +185,13 @@ TOP HUB NODES (łączą najwięcej domen):
 
 Po wyświetleniu raportu, zaproponuj actionable next steps:
 
-1. **Orphans z treścią** → "Dodać linki z odpowiednich index files?"
-2. **Dangling links** → "Naprawić X złamanych linków?" (pokaż propozycje fixów)
-3. **Staleness ratio > 1.0** → "Uruchomić `/reweave` na top kandydatach?"
-4. **Izolowane klastry** → "Sprawdzić czy te moduły powinny być połączone z głównym grafem?"
-5. **Brak frontmatter** → "Dodać brakujące `updated:` i `status:` do X plików?"
+1. **Stale huby (`stale_hubs`)** → "Odświeżyć hub X (Nd / budżet 7d)?" — priorytet nad resztą
+2. **Orphans z treścią** → "Dodać linki z odpowiednich index files?"
+3. **Dangling links** → "Naprawić X złamanych linków?" (pokaż propozycje fixów)
+4. **Staleness ratio > 1.0** → "Uruchomić `/reweave` na top kandydatach?"
+5. **Izolowane klastry** → "Sprawdzić czy te moduły powinny być połączone z głównym grafem?"
+6. **Brak frontmatter** → "Uzupełnić brakujące `type:` i `status:` w X plikach?" (`updated:` stampuje pre-commit — nigdy nie wpisuj go ręcznie)
+7. **Dług legacy** (`legacy_fields` > 0) → "Usunąć `depends-on:`/`cadence:`/`sources:` z X plików?"
 
 Pytaj usera o decyzję. Nie wykonuj automatycznie.
 
@@ -153,6 +202,7 @@ Pytaj usera o decyzję. Nie wykonuj automatycznie.
 | Problem | Rozwiązanie |
 |---------|-------------|
 | Skrypt nie działa | Sprawdź `python3 --version`, sprawdź ścieżkę |
-| Brak modułów | Upewnij się że foldery 1_receptionOS/, 2_apolonia/, 3_fte/, _culture/ istnieją |
+| Brak modułów | Upewnij się że foldery z `GRAPH_DIRS` (1_receptionOS/, 2_apolonia/, 3_fte/, _culture/, osoby/, _sales/, _events/) istnieją |
+| `warnings`: git nie zna plików | Vault jest podkatalogiem repo albo innym worktree — sprawdź `git -C <vault> rev-parse --show-prefix`; do czasu fixu staleness jest zaniżona |
 | Za dużo orphanów | Sprawdź czy nowe pliki (np. styleguide import) nie zaburzają wyniku — filtruj oczekiwane orphany |
 | JSON parse error | Skrypt wypisuje na stdout — sprawdź czy stderr nie zaśmieca output |

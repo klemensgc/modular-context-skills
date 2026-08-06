@@ -107,12 +107,14 @@ Struktura zgodna z `_claude/2-templates/brochure.md`:
 ```markdown
 ---
 title: {Nazwa} — {Koncept}
-updated: YYYY-MM-DD
-sources: [[source1]], [[source2]]
-audience: {lista}
-status: draft
+type: log
+data: {YYYY-MM-DD}
+agent: /brief
 language: en|pl
 ---
+
+**Odbiorca:** {lista}
+**Źródła:** [[source1]], [[source2]]
 
 <!--
   FORMAT NOTES FOR DESIGN:
@@ -139,6 +141,11 @@ language: en|pl
 <!-- PAGE 2 — {NAZWA} -->
 ...
 ```
+
+Blok `**Odbiorca:** / **Źródła:**` stoi **przed** pierwszym markerem `<!-- PAGE 1 -->`, więc nie
+trafia do renderu — a wiki-linki zostają widoczne dla grafu Obsidiana i dla `validate_contract.py`.
+Nie wkładaj `[[...]]` do komentarza HTML: link w komentarzu to link martwy. Pola `sources:`
+i `audience:` nie istnieją w schemacie 2.0 (`_schemas/core.yaml` → `removed-fields`).
 
 ### 2b. Copy rules
 
@@ -335,7 +342,7 @@ Po eksporcie:
 
 1. Upewnij się że pliki są w `_workspace/{YYYY-MM}/wN/`
 2. Jeśli >2 pliki → subfolder: `_workspace/{YYYY-MM}/wN/{name}/`
-3. Content .md ma `status: stable` (jeśli zaakceptowany)
+3. Content .md ma komplet pól `type: log` + `data:` + `agent:` — sprawdź `python3 _claude/9-automation/schema_lint.py <plik>` (0 FAIL). `status:` nie jest polem typu `log`
 4. Wersje: `{name}-v2-wireframe.html` (zachowaj poprzednie wersje)
 
 ---

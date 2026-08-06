@@ -61,8 +61,10 @@ Dla kazdego `claude-session` itemu:
 1. **Dopasuj projekt** → otworz `{projekt}_index.md`
 2. **Znajdz relevant moduly** po keywords z itemu
 3. **Przeczytaj 2-4 kluczowe pliki** zeby zrozumiec current state
-4. **Sprawdz `updated:`** — jesli >2 tygodnie, oznacz jako stale
-5. **Sprawdz `depends-on:`** → follow the chain do powiazanych plikow
+4. **Sprawdz swiezosc z git log** (`git log -1 --format=%ad --date=short -- <plik>`) — prog per typ:
+   hub 7 dni, `modul` 60, `osoba` 180, `deal` 30 (tylko `pipeline/active/`). Commity z trailerem
+   `Meta: true` sie nie licza. Nie czytaj daty z pola `updated:`
+5. **Sprawdz wiki-linki w tresci + krawedzie `owner:` / `osoby:` / `dotyczy:`** → follow the chain do powiazanych plikow
 6. **Jesli brak modulu** → sprawdz `_transcripts/` i `_transcripts-backlog/`
 7. **Zidentyfikuj gap:** co jest w repo vs co user chce osiagnac
 8. **Sformuluj concrete deliverable(s)** — pliki do stworzenia lub aktualizacji
@@ -113,8 +115,9 @@ Zloz plik `_tasklist/2026/week-2026-WNN.md`:
 ```markdown
 ---
 title: Week 2026-WNN (DD-DD.MM)
-updated: YYYY-MM-DD
-status: active
+type: log
+data: YYYY-MM-DD
+agent: /tasklist
 week-start: YYYY-MM-DD
 week-end: YYYY-MM-DD
 ---
@@ -159,10 +162,17 @@ week-end: YYYY-MM-DD
 
 ## Week Notes
 
-**Stale files detected:** [pliki z updated: >2 tyg, jesli sa]
+**Stale files detected:** [pliki bez merytorycznego commita ponad prog swojego typu — z git log, nie z frontmattera]
 **Missing modules:** [tematy bez dedykowanego pliku w repo, jesli sa]
 **Suggested first session:** T[N] — [dlaczego zaczynac od tego]
 ```
+
+Plik tygodniowy jest write-once → `type: log`, wiec `data:` i `agent:` sa **wymagane**
+(`_schemas/log.yaml`); bez nich `schema_lint.py` daje 2 FAIL i blokuje commit. `status:` nie jest
+polem typu `log` — nie dopisuj. Uwaga: `_tasklist/**` nie figuruje ani w `map.yaml` →
+`default-type`, ani w `log.yaml` → `location`, wiec jawny `type: log` jest tu jedyna rzecza,
+ktora nadaje plikowi typ. Sprawdz przed pokazaniem:
+`python3 _claude/9-automation/schema_lint.py _tasklist/2026/week-2026-WNN.md` → 0 FAIL.
 
 ### Krok 6: Podsumowanie
 

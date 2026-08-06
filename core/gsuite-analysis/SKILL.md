@@ -105,11 +105,13 @@ Pick one pattern or combine. Each pattern ends with a vault artifact the user ca
    ```markdown
    ---
    title: Inbox sweep — {account} — {YYYY-MM-DD}
-   updated: {YYYY-MM-DD}
-   status: active
-   source: {account}
+   type: log
+   data: {YYYY-MM-DD}
+   agent: /gsuite-analysis
    ---
    # Inbox sweep {account} {date}
+
+   Źródło: {account} (Gmail MCP: {lista użytych narzędzi}).
 
    ## Important ({count})
    - {Sender} — {1-line summary} — [draft webUrl]
@@ -156,10 +158,13 @@ Pick one pattern or combine. Each pattern ends with a vault artifact the user ca
    ```markdown
    ---
    title: Stale threads — {YYYY-MM-DD}
-   updated: {YYYY-MM-DD}
-   status: active
+   type: log
+   data: {YYYY-MM-DD}
+   agent: /gsuite-analysis
    ---
    # Stale threads {date}
+
+   Źródło: {account} (Gmail MCP: {lista użytych narzędzi}).
 
    ## Your turn ({count})
    - {Person} — last message from them {days} days ago — {thread subject} — [thread link]
@@ -206,10 +211,13 @@ Pick one pattern or combine. Each pattern ends with a vault artifact the user ca
    ```markdown
    ---
    title: Focus blocks — {YYYY-MM-DD} → {YYYY-MM-DD+7d}
-   updated: {YYYY-MM-DD}
-   status: active
+   type: log
+   data: {YYYY-MM-DD}
+   agent: /gsuite-analysis
    ---
    # Focus blocks next 7d
+
+   Źródło: {account} calendar (Calendar MCP: {lista użytych narzędzi}).
 
    ## {Day 1}
    - 10:00-12:30 (2.5h) — {account} primary
@@ -257,11 +265,13 @@ Pick one pattern or combine. Each pattern ends with a vault artifact the user ca
    ```markdown
    ---
    title: Meeting prep — {event summary} — {YYYY-MM-DD HH:MM}
-   updated: {YYYY-MM-DD}
-   status: active
-   source: {account} calendar + Gmail history
+   type: log
+   data: {YYYY-MM-DD}
+   agent: /gsuite-analysis
    ---
    # Meeting prep: {event summary}
+
+   Źródło: {account} calendar + Gmail history ({lista użytych narzędzi}).
 
    ## When + where
    {start} → {end} | {location or meetingLink}
@@ -291,11 +301,17 @@ Pick one pattern or combine. Each pattern ends with a vault artifact the user ca
 
 Every pattern writes ONE artifact per invocation to `_workspace/{YYYY-MM}/w{N}/`.
 
-Frontmatter required fields:
+`_workspace/**` = `type: log` (`_schemas/log.yaml`). Frontmatter required fields:
 - `title` — descriptive
-- `updated` — today's date
-- `status: active`
-- `source` — which account(s) + which tools used (for audit trail)
+- `type: log`
+- `data` — today's date (YYYY-MM-DD)
+- `agent` — `/gsuite-analysis`
+
+Nie dopisuj: `updated:` (stampuje pre-commit, nigdy ręcznie), `status:` (nie jest polem typu `log`;
+enum statusu istnieje tylko dla `modul`/`osoba`), `source:` (pole usunięte w 2.0 — źródło i użyte
+narzędzia opisujesz w treści, jako pierwsza linia pod nagłówkiem).
+
+Sprawdź przed pokazaniem: `python3 _claude/9-automation/schema_lint.py <plik>` → 0 FAIL.
 
 Never commit these artifacts blindly — they may contain sensitive email excerpts. User's responsibility to move/delete.
 

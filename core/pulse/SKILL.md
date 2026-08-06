@@ -40,19 +40,31 @@ Wszystko czytaj równolegle (parallel reads/tools):
 - `3_fte/3_fte_index.md`
 - `_culture/culture_index.md`
 
-**Hub files:**
+**Hub files** (whitelist `HUBS` — budżet świeżości 7 dni):
 - `1_receptionOS/4-go-to-market/pipeline.md`
-- `1_receptionOS/8-strategy/quest-board-*.md` (najnowszy)
 - `1_receptionOS/1-product/roadmap.md`
+- `1_receptionOS/1-product/features.md`
+- `1_receptionOS/4-go-to-market/modular-offer.md`
 - `_culture/team/team-roster.md`
+- `_sales/_kanban.md`
+
+**Pozostałe pliki wejściowe:**
+- `1_receptionOS/8-strategy/quest-board-*.md` (najnowszy)
 - `2_apolonia/6-marketing/events.md`
-- `_decisions-log.md`
+- `_decisions-log.md` — **tom zamknięty** (`status: archive`, decyzje od 2026-07-29 idą do `_events/YYYY/`). Czytasz go jako historię, nie jako źródło stanu; nie raportuj jego staleness.
 
 **Staleness check:**
-Uruchom `python3 .claude/skills/graph/scripts/vault-graph.py . staleness` → parsuj JSON. Wyciągnij top 10 stale modułów z staleness_ratio > 1.0. Ratio = days_since_update / cadence_days (hot=7d, tactical=30d, iron-cold=60d).
+Uruchom `python3 .claude/skills/graph/scripts/vault-graph.py . staleness` → parsuj JSON. Ratio liczy sam skrypt: świeżość z gita (ostatni commit dotykający pliku, commity z trailerem `Meta: true` pomijane), budżet dni: **hub 7d** (whitelist `HUBS` — wygrywa z typem), modul 60d, osoba 180d, deal 30d **tylko w `_sales/pipeline/active/`**. Poza sygnałem (skrypt sam je wycina): `status: archive`, `4_apollo/**`, encje write-once, deale spoza `pipeline/active/`.
 
-**Stuby i needs-update:**
-Grep: `status: stub` i `status: needs-update` w folderach projektowych.
+Wyciągnij:
+- `stale_hubs` — **pierwsza pozycja radaru**, jeśli niepuste. Hub po 7 dniach jest przeterminowany, a to pliki, z których korzysta cały zespół.
+- top 10 z `top_30` z `staleness_ratio > 1.0` (poza hubami) — do STALE INTEL.
+
+Jeśli JSON ma niepuste `warnings` (brak gita → fallback na mtime albo ścieżki gita nie pasują do vaulta), zaznacz to w briefingu — ranking jest wtedy zaniżony.
+
+**Drafty i needs-update:**
+Grep: `status: draft` i `status: needs-update` w folderach projektowych.
+Dodatkowo grep legacy `status: stub` — wartość spoza enuma 2.0 (stable | draft | needs-update | archive), której `schema_lint` nie łapie na dealach (`deal.yaml` → `fields: {}`). Trafienia poza `_archive/` i `_network/` raportuj jako dług migracji („do zmiany na `draft`"), nie jako zwykły draft.
 
 **Backlog:**
 Sprawdź `_transcripts-backlog/` — ile transkrypcji czeka.
@@ -177,9 +189,8 @@ Wyświetl tabelę zmian. Poczekaj na akceptację.
 
 Dla każdego modułu:
 1. Przeczytaj plik (jeśli nie czytany w Fazie 1)
-2. Edytuj treść
-3. Zaktualizuj `updated:` na dzisiejszą datę
-4. Dodaj źródło do `sources:` jeśli nowe
+2. Edytuj treść — fakt wplatasz w `## Stan`, datowane wpisy tylko w `## Log`
+3. Frontmattera nie ruszasz: `updated:` stampuje pre-commit, `sources:` żyje wyłącznie w `_transcripts/**-summary.md`
 
 ### 4c. Strategic Reflect
 
@@ -236,7 +247,7 @@ Każdy prompt powinien być gotowy do WKLEJENIA — nie "zrób coś z pipeline" 
 | Problem | Rozwiązanie |
 |---------|-------------|
 | Vault jest świeży, mało sygnałów | Skup radar na forward-looking (approaching deadlines, commitment tracker) |
-| Staleness script nie działa | Fallback: ręczny grep `updated:` + `cadence:`, oblicz ratio |
+| Staleness script nie działa | Fallback: `git log -1 --format=%cs -- <plik>` na hubach i modułach, porównaj z budżetem (hub 7d, modul 60d, osoba 180d, deal 30d w `pipeline/active/`). Uwaga: `-1` nie odsiewa commitów `Meta: true` — przy podejrzeniu batcha użyj `git log --format='%cs %(trailers:key=Meta,valueonly)' -- <plik>` i weź pierwszą linię bez `true` |
 | User nie chce odpowiadać na pytania | Skip Faza 3, przejdź do update + next sessions |
 | Pipeline jest mały (0-3 deals) | Skup pipeline health na conversion quality, nie volume |
 | Brak approaching deadlines | Radar → cross-project dependencies i team capacity risks |

@@ -95,7 +95,7 @@ Evidence:
 Proposed module:
 - File: [folder/nazwa-pliku.md]
 - Project: [ROS / Apolonia / Fundacja / Culture]
-- depends-on: [[related-module-1]], [[related-module-2]]
+- Powiązania (wiki-linki w treści): [[related-module-1]], [[related-module-2]]
 
 Content sketch:
 - [Bullet 1 — main idea]
@@ -121,13 +121,17 @@ Dla każdego zaakceptowanego kandydata:
    ```yaml
    ---
    title: [Tytuł]
+   type: modul
    updated: [dziś YYYY-MM-DD]
    status: draft
-   cadence: tactical
-   sources: [[transkrypt1]], [[transkrypt2]], [[transkrypt3]]
-   depends-on: [[related-module]]
    ---
    ```
+   `updated:` wpisujesz **jeden raz, przy tworzeniu pliku** — `_schemas/modul.yaml` wymaga tego pola,
+   a `schema_lint.py` daje FAIL („brak 'updated:'") już na hooku PostToolUse, zanim pre-commit
+   zdąży cokolwiek ostampować. Potem **nie ruszasz** — dalej aktualizuje je pre-commit.
+   `projekt:` stampuje pre-commit z `map.yaml` → `project-by-glob`; nigdy nie wpisujesz go sam.
+   Źródła transkryptowe i powiązania wskazujesz wiki-linkami w treści, nie polami frontmattera
+   (`sources:`, `depends-on:`, `cadence:`, `audience:` nie istnieją w schemacie 2.0).
 
 2. **Wypełnij content** — bazuj na transkrypcjach, cytuj źródła
 3. **Dodaj wiki-links** w powiązanych modułach → nowy moduł
@@ -139,7 +143,7 @@ Dla każdego zaakceptowanego kandydata:
 GRADUATE REPORT — [data]
 
 Created modules:
-- [ścieżka1.md] — [1 zdanie opis] (sources: N transkrypcji)
+- [ścieżka1.md] — [1 zdanie opis] (źródła: N transkrypcji)
 - [ścieżka2.md] — [opis]
 - ...
 

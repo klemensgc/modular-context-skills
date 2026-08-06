@@ -64,7 +64,9 @@ Dla każdego dotkniętego projektu przeczytaj odpowiednie moduły:
 - **Ludzie** → `_culture/team/team-roster.md`
 - **Decyzje** → `_decisions-log.md`
 
-Sprawdź daty `updated:` w frontmatter — czy moduły są aktualne vs. co mówi WhatsApp.
+Sprawdź świeżość modułów z git log (`git log -1 --format=%ad --date=short -- <plik>`, commity
+z trailerem `Meta: true` pomijasz) — czy moduły są aktualne vs. co mówi WhatsApp. Nie czytaj daty
+z pola `updated:`: stampuje je pre-commit, więc mówi o commicie, nie o merytorycznej aktualności.
 
 ### 2c. Analiza wiadomości
 Dla każdej grupy wyciągnij:
@@ -89,7 +91,7 @@ Przedstaw wyniki userowi w strukturze:
 
 ## 📋 Nowe ustalenia (nie ma ich jeszcze w vault)
 - [Grupa] Co ustalono → który moduł powinien być zaktualizowany
-  Powiązany moduł: [[nazwa-modulu]] (updated: YYYY-MM-DD)
+  Powiązany moduł: [[nazwa-modulu]] (ostatni merytoryczny commit: YYYY-MM-DD)
 
 ## 📊 Kontekst
 - Kto jest najbardziej aktywny
@@ -125,7 +127,7 @@ Dla każdego zatwierdzonego elementu:
 ### Aktualizacja modułu
 1. Przeczytaj moduł
 2. Dodaj/zaktualizuj informację
-3. Zaktualizuj `updated:` w frontmatter na dzisiejszą datę
+3. `updated:` stampuje pre-commit — nie wpisuj ręcznie
 4. Jeśli sprzeczność z istniejącą treścią → POKAŻ OBE WERSJE, zapytaj usera
 
 ### Quest-board
@@ -140,7 +142,18 @@ Dla każdego zatwierdzonego elementu:
 
 ### Workspace note
 1. Zapisz digest jako `_workspace/{YYYY-MM}/wN/whatsapp-digest-{YYYY-MM-DD}.md`
-2. Frontmatter: `title`, `updated`, `status: stable`, `sources: WhatsApp`
+2. Frontmatter (`_schemas/log.yaml` — `data:` i `agent:` są **wymagane**, bez nich lint daje 2 FAIL i blokuje commit):
+   ```markdown
+   ---
+   title: WhatsApp digest — {YYYY-MM-DD}
+   type: log
+   data: {YYYY-MM-DD}
+   agent: /whatsapp-digest
+   ---
+   ```
+   Nie dopisuj `status:` (nie jest polem typu `log`) ani `updated:` (stampuje pre-commit).
+   Źródło "WhatsApp: {grupa}" podaj w treści, nie polem `sources:`.
+3. Sprawdź: `python3 _claude/9-automation/schema_lint.py <plik>` → 0 FAIL
 
 ---
 

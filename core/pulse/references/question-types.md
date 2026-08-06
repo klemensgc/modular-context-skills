@@ -17,7 +17,7 @@
 - "Roadmap zaklada launch feature X w Q1. Jestesmy w polowie Q1 — na torze?"
 - "Team roster mowi Czarek robi 8 workstreamow. Zmienilo sie cos?"
 
-**Dane do skanu:** Moduly z `updated:` > 14 dni + wysoka connectivity (depends-on count).
+**Dane do skanu:** Moduly nietkniete od >14 dni wg gita (`vault-graph.py . staleness` → `staleness_days`) + wysoka connectivity (`incoming_links`).
 
 ---
 
@@ -102,7 +102,7 @@
 - "Roadmap mowi Q1 launch, quest board mowi 'po Miami'. Ktore aktualne?"
 - "Team roster: Weronika active. Operations: Weronika closed. Ktore?"
 
-**Dane do skanu:** Consistency check miedzy powiazanymi modulami (depends-on chains).
+**Dane do skanu:** Consistency check miedzy modulami polaczonymi wiki-linkami i krawedziami frontmatteru (`owner:`, `osoby:`, `dotyczy:`).
 
 ---
 

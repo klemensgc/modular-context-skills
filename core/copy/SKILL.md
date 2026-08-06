@@ -101,11 +101,13 @@ Nie nazywaj frameworku w copy. Po prostu stosuj:
 ```markdown
 ---
 title: {Kampania} — Copy Variants
-updated: YYYY-MM-DD
-status: draft
-audience: {target}
+type: log
+data: {YYYY-MM-DD}
+agent: /copy
 language: pl|en
 ---
+
+**Target:** {target} — odbiorca opisany w treści, nie w polu frontmattera.
 
 ## Wariant 1: {nazwa} (Short/Long/Heritage/Role-specific)
 
@@ -126,8 +128,9 @@ language: pl|en
 ```markdown
 ---
 title: {Kontekst} — Email Template
-updated: YYYY-MM-DD
-status: draft
+type: log
+data: {YYYY-MM-DD}
+agent: /copy
 ---
 
 ## Kontekst
@@ -158,9 +161,14 @@ Krótki tekst (2-5 zdań). Zapisz bezpośrednio w odpowiednim pliku (np. basebal
 ```markdown
 ---
 title: {System} — {Typ} Prompt
-updated: YYYY-MM-DD
+type: modul
+updated: {YYYY-MM-DD}
 status: draft
 ---
+
+## Stan
+{Gdzie ten prompt jest wdrożony i w jakiej wersji — 2-3 zdania. Sekcja wymagana przez
+`_schemas/modul.yaml` (kontrakt living-state).}
 
 ## Role
 {Kim jest AI — 1-2 zdania}
@@ -178,6 +186,12 @@ status: draft
 ## Competency Boundaries
 {Co AI może, czego NIE może}
 ```
+
+Prompt systemowy żyje w folderze projektu (`1_receptionOS/5-operations/` itp.) i ktoś go potem
+edytuje → to `type: modul` (`title` + `updated` + `status` wymagane przez `_schemas/modul.yaml`).
+`updated:` wpisujesz **tylko przy tworzeniu pliku** (inaczej PostToolUse daje FAIL na brak pola),
+potem nie ruszasz — dalej stampuje pre-commit. Jeśli prompt zostaje w `_workspace/` jako
+jednorazowy draft, użyj frontmattera `type: log` jak w szablonach wyżej.
 
 ---
 
@@ -201,13 +215,16 @@ Iteruj max 3 razy. Jeśli po 3 iteracjach nadal nie OK → zapytaj: "Co dokładn
 
 ## FAZA 4: FINALIZE
 
-1. Zmień `status: draft` → `status: stable`
-2. Zaktualizuj `updated:` na dzisiejszą datę
+1. Frontmatter wg typu pliku (`_schemas/`):
+   - deliverable w `_workspace/` → `type: log` + `data:` + `agent:` (bez `status:` — `log.yaml` nie ma tego pola)
+   - prompt/moduł w drzewie projektu → `type: modul`, `status: draft` → `status: stable` po akceptacji
+2. `updated:` stampuje pre-commit — nie wpisuj ręcznie (jedyny wyjątek: wpisanie daty przy **tworzeniu** nowego `modul`)
 3. Plik lokalizacja:
    - Workspace deliverable: `_workspace/{YYYY-MM}/wN/{name}.md`
    - Prompt for system: odpowiedni folder projektu (np. `1_receptionOS/5-operations/`)
    - Blurb/pitch: embeduj w istniejącym pliku (baseball card, module)
-4. Jeśli user chce PDF → powiedz: "Użyj `/brief` żeby zamienić content w PDF"
+4. Sprawdź lint przed pokazaniem: `python3 _claude/9-automation/schema_lint.py <plik>` → 0 FAIL
+5. Jeśli user chce PDF → powiedz: "Użyj `/brief` żeby zamienić content w PDF"
 
 ---
 

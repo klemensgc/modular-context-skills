@@ -57,7 +57,7 @@ Przeczytaj równolegle:
 
 Grep vault po sygnałach otwartych pytań:
 - "?" w transkrypcjach (pytania zadane explicite)
-- `status: needs-update` lub `status: stub` — luki w wiedzy
+- `status: needs-update` lub `status: draft` — luki w wiedzy
 - Quest board items bez postępu
 - Pipeline leads bez follow-up
 

@@ -84,9 +84,22 @@ Dla każdego folderu z >3 plikami .md:
 
 Grep po plikach w scope:
 - Brak `title:` → ERROR
-- Brak `updated:` → ERROR
-- Brak `status:` → WARNING
-- `status: stub` lub `status: needs-update` → INFO (do przeglądu)
+- Brak `type:` (i brak rozstrzygalnego typu z globa w `_schemas/map.yaml`) → ERROR
+- Brak `status:` w pliku typu `modul` lub `osoba` → ERROR (`schema_lint.py` daje tam FAIL).
+  W pozostałych typach (`log`, `event`, `spotkanie`, `deal`) `status:` nie jest polem — jego brak to nie błąd
+- `status:` poza enumem swojego typu → ERROR. **Enum zależy od typu:**
+  `modul` → stable | draft | needs-update | archive; `osoba` → aktywna | eks | zamknieta.
+  Nie mierz kart z `osoby/` enumem modułu — wszystkie 34 wyjdą fałszywie jako ERROR
+- `status: draft` lub `status: needs-update` (tylko `modul`) → INFO (do przeglądu)
+- Pola legacy `cadence:` / `audience:` / `depends-on:` / `sources:` (poza `-summary.md`) → ERROR
+- `type: log` bez `data:` lub `agent:` → ERROR (`_schemas/log.yaml` wymaga obu)
+
+`updated:` stampuje pre-commit — ręczny wpis nie jest źródłem prawdy (świeżość liczysz z git log).
+Ale **brak** `updated:` w pliku typu `modul` / `osoba` / `deal` / `event` to ERROR: `schema_lint.py`
+robi tam `req("updated")` na poziomie FAIL, więc plik bez tego pola nie przejdzie hooka ani commita.
+
+Zamiast ręcznego grepu preferuj `python3 _claude/9-automation/schema_lint.py --all` — to ta sama
+implementacja, którą egzekwują hooki, więc nie rozjedzie się z kontraktem.
 
 ### Skan 5: File Organization
 
@@ -136,7 +149,9 @@ VAULT AUDIT REPORT — {scope} — {date}
 Na bazie raportu, zaproponuj plan naprawy:
 
 ### Auto-fixes (bezpieczne, odwracalne):
-- Dodanie brakujących `updated:` w frontmatter
+- Dodanie brakujących pól wymaganych przez typ: `type:`, `status:` (modul/osoba), `data:`+`agent:` (log)
+- Dodanie brakującego `updated:` **tylko** tam, gdzie pola nie ma w ogóle (data = dziś). Istniejącej
+  wartości nie nadpisujesz — od tego jest pre-commit
 - Naprawienie broken links (jeśli jednoznaczne — plik istnieje pod inną ścieżką)
 - Dodanie plików do .gitignore
 
@@ -162,7 +177,8 @@ Dla każdej zaakceptowanej naprawy:
 
 1. **Przeczytaj plik** przed edycją (twarda reguła repo)
 2. **Edytuj** — napraw issue
-3. **Zaktualizuj `updated:`** w frontmatter na dzisiejszą datę
+3. **Nie nadpisuj istniejącego `updated:`** — stampuje je pre-commit. Dopisz je wyłącznie tam,
+   gdzie pola brakuje w typie, który go wymaga (modul/osoba/deal/event)
 4. **Zaktualizuj referencje** — jeśli rename/move, grep po starym linku i podmień
 
 ### Kolejność wykonania:

@@ -2,6 +2,8 @@
 
 Przykłady z sesji repo. Metryki, findings, lessons learned.
 
+> **Zapis historyczny.** Example 1 (2026-02-22) raportuje pola `cadence:` i `depends-on:` — w schemacie 2.0 te pola **nie istnieją**. Nie kopiuj ich do nowych audytów; kanon pól to `_schemas/{typ}.yaml`. Zostawione jako zapis tego, co wtedy znaleziono.
+
 ---
 
 ## Example 1: Full Vault Coherence Audit (2026-02-22)

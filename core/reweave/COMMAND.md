@@ -38,20 +38,31 @@ ZADANIE: Przeskanuj vault pod kątem [wybranych triggerów]:
 
 [Jeśli --staleness lub domyślnie:]
 Trigger 2 — Staleness + Connectivity:
-- Foldery: 1_receptionOS/, 2_apolonia/, 3_fte/, _culture/
-- Kryterium: staleness_ratio > 1.0 (= days_since_update / cadence_days; hot=7d, tactical=30d, iron-cold=60d) AND incoming_links >= 3
-- Pomijaj: _transcripts/, _claude/, _workspace/, _assets/, .claude/, status: stub
+- Foldery: 1_receptionOS/, 2_apolonia/, 3_fte/, _culture/, osoby/, _sales/pipeline/active/
+- Kryterium: staleness_ratio > 1.0 AND incoming_links >= 3.
+  Ratio liczy `graph/scripts/vault-graph.py . staleness` — świeżość z gita (ostatni commit
+  dotykający pliku, commity z trailerem `Meta: true` pomijane), budżet: hub 7d (whitelist
+  HUBS, wygrywa z typem), modul 60d, osoba 180d, deal 30d (tylko `_sales/pipeline/active/`),
+  brak typu 60d. Nie licz ratio ręcznie z `updated:`.
+  Wyjątek od progu incoming_links: każdy plik ze `stale_hubs` jest kandydatem HIGH
+  niezależnie od liczby linków.
+- Poza rankingiem: `status: archive`, 4_apollo/**, encje write-once, deale spoza
+  pipeline/active/ — skrypt wycina je sam, zanim policzy ratio; nie filtruj ich po fakcie.
+  Sam skan pomijaj w: _transcripts/, _claude/, _workspace/, _assets/, .claude/
 
 [Jeśli domyślnie (bez --staleness):]
 Trigger 5 — Transcript Volume:
-- Moduły z 3+ nowszych transkrypcji w sources: niż updated:
+- Moduły, do których od ostatniej realnej zmiany (data z gita) doszły 3+ nowe transkrypty:
+  szukaj po `_transcripts/**-summary.md` — pole `sources:` żyje wyłącznie tam, nigdy w module.
 
 Dla każdego kandydata:
 1. Przeczytaj CAŁY moduł
 2. Oceń reweave action (Add Connections / Rewrite Content / Sharpen / Split / Challenge)
 3. Oblicz priority score wg reweave-standards.md
 
-Hub files (bonus +20): pipeline.md, roadmap.md, features.md, modular-offer.md, team-roster.md
+Hub files (bonus +20) — whitelist HUBS: 1_receptionOS/4-go-to-market/pipeline.md,
+1_receptionOS/1-product/roadmap.md, 1_receptionOS/1-product/features.md,
+1_receptionOS/4-go-to-market/modular-offer.md, _culture/team/team-roster.md, _sales/_kanban.md
 
 Format wyjścia: HIGH (score>=60) / MEDIUM (30-59) / LOW (<30) / Odrzuceni
 Max 20 kandydatów HIGH+MEDIUM. Pisz PO POLSKU.
@@ -69,12 +80,12 @@ Jeśli `--dry-run` → wyświetl raport ze skanu i ZAKOŃCZ.
 
 1. Przeczytaj `_claude/7-skill-references/reweave-standards.md`
 2. Przeczytaj moduł docelowy (CAŁY)
-3. Przeczytaj `depends-on:` modułów + grep backlinks → zidentyfikuj kontekst
+3. Grep backlinki (wiki-linki do modułu) + krawędzie z frontmattera (`owner:`, `osoby:`, `dotyczy:`) → zidentyfikuj kontekst
 4. Zastosuj 3 testy:
    - **Articulation Test:** "Ten moduł łączy się z [X] ponieważ ___"
    - **Agent Traversal Check:** "Agent podążając za linkiem podejmie jaką decyzję?"
    - **Sharpening Test:** "Dodanie info wyostrza czy rozmywa przekaz?"
-5. Określ action → zastosuj → zaktualizuj frontmatter
+5. Określ action → zastosuj (edytujesz **treść** modułu; `updated:` stampuje pre-commit — nie wpisuj go ręcznie)
 6. Idź do KROK 3
 
 ### Dla wyników ze skanu:
@@ -85,12 +96,12 @@ Dla każdego HIGH (max 8, score descending):
 2. **Przeczytaj** moduł/źródło triggering (np. pipeline.md, roadmap.md — zależnie od kontekstu)
 3. **Zastosuj 3 testy** z reweave-standards.md
 4. **Określ Reweave Action** (1 z 5):
-   - **ADD CONNECTIONS** → dodaj wiki-links, depends-on
+   - **ADD CONNECTIONS** → dodaj wiki-links w treści (krawędzie osobowe tylko przez `owner:`/`osoby:`/`uczestnicy:`)
    - **REWRITE CONTENT** → zaktualizuj fakty, statusy, liczby
    - **SHARPEN** → usuń hedging, potwierdź zrealizowane
    - **SPLIT** → FLAG dla usera, nie wykonuj
    - **CHALLENGE** → STOP, pytaj usera
-5. **Zastosuj** zmiany + zaktualizuj frontmatter (updated:, sources:, depends-on:)
+5. **Zastosuj** zmiany w treści modułu — `updated:` stampuje pre-commit, nie dopisujesz go ręcznie; `sources:` nie istnieje poza `-summary.md`
 6. **Zaloguj** (moduł, action, opis)
 
 Dla MEDIUM: zapisz do `_claude/5-backlog/reweave-queue.md` (tabela Pending).
@@ -107,10 +118,17 @@ Dla LOW: zaloguj w raporcie (bez akcji).
 Dla KAŻDEGO edytowanego modułu:
 
 1. **Cold-Read Test** — przeczytaj tytuł + pierwszą sekcję. Przewiduj resztę. Porównaj.
-2. **Schema Check** — frontmatter: title?, updated: dzisiejsze?, depends-on: [[]]?, sources:?
-3. **Neighbor Coherence** — przeczytaj 1 moduł z depends-on. Zgadzają się na fakty?
+2. **Schema Check** — frontmatter: `type:` obecny? `status:` z enuma **właściwego dla typu**?
+   - `modul` → stable | draft | needs-update | archive
+   - `osoba` → aktywna | eks | zamknieta (plus wymagane `relacja:`)
+   - `deal` → `_schemas/deal.yaml` ma `fields: {}`, więc `status:` nie ma tu enuma; legacy `status: stub` zamień na `draft` tylko jeśli i tak edytujesz plik
+   Bez `cadence:`/`depends-on:`/`audience:`/`sources:` (`sources:` legalne wyłącznie w `_transcripts/**-summary.md`). `updated:` zostawiasz pre-commitowi.
+   Przy wątpliwości nie zgaduj enuma — otwórz `_schemas/{typ}.yaml`.
+3. **Neighbor Coherence** — przeczytaj 1 moduł, do którego prowadzi wiki-link. Zgadzają się na fakty?
 
-Fail → cofnij zmiany, dodaj do reweave-queue.md z notatką.
+Fail → jeśli to Schema Check na polu, którego sam dotknąłeś: popraw pole, nie cofaj treści.
+W pozostałych przypadkach cofnij zmiany i dodaj do reweave-queue.md z notatką.
+Frontmatter niezgodny ze schematem, ale zastany (nie Twoja edycja) → zgłoś w raporcie, nie kasuj poprawnego reweave.
 
 ---
 
@@ -144,4 +162,7 @@ EOF
 
 - Skan zwraca 0 kandydatów → "Vault healthy — brak modułów do reweave."
 - Moduł z argumentu nie istnieje → error + exit
-- Moduł ma status: stub → "Moduł jest stub — reweave nie dotyczy. Rozważ uzupełnienie."
+- Moduł ma `status: draft` → "Moduł jest draftem — reweave nie dotyczy. Rozważ uzupełnienie."
+- Moduł ma `status: archive` → pomiń, archiwum jest poza staleness
+- Plik ma legacy `status: stub` (wartość spoza enuma 2.0, `schema_lint` nie łapie jej na dealach) → traktuj jak `draft`; podmianę na `draft` zrób tylko przy okazji realnej edycji tego pliku
+- Kandydat jest kartą osoby (`osoby/**`) → reweave dotyczy treści `## Stan`; enum statusu to aktywna | eks | zamknieta, NIE stable/draft
