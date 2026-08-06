@@ -10,6 +10,8 @@ description: |
   "prompt dla ralph loop", "autonomiczny prompt", "mining prompt", "iteracyjny prompt"
 ---
 
+> **DEPRECATED (2026-08):** superseded by native workflow orchestration; see `core/workflow-design`.
+
 # Ralph Prompt Builder
 
 Interaktywny wizard do budowania promptow dla Ralph Wiggum autonomous loop.

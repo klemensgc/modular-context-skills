@@ -10,6 +10,8 @@ description: |
   "plan na noc", "przygotuj na noc", "nocny run", "ralph chain", "night work", "chain prompts"
 ---
 
+> **DEPRECATED (2026-08):** superseded by native workflow orchestration; see `core/workflow-design`.
+
 # Overnight — Queue-Driven Single Loop
 
 Plans and executes chained Ralph prompts as ONE continuous Ralph loop driven by a queue file.

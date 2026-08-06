@@ -1,6 +1,6 @@
 # Modular Context Skills — Curated Library
 
-> **26 opinionated Claude Code workflows** for Obsidian-native knowledge work. Stars rated. Prerequisites explicit. Install via plugin.
+> **24 opinionated Claude Code workflows** for Obsidian-native knowledge work. Stars rated. Prerequisites explicit. Install via plugin.
 
 Designed for users of the [Modular Context plugin](https://github.com/klemensgc/modular-context-obsidian-plugin). Each skill is a self-contained playbook — not a tip, not a template.
 
@@ -16,6 +16,7 @@ This library isn't a pile of tips — it's a **whole AI company stack** built on
 | 🧠 **Self-healing Knowledge Base** | The vault keeps itself current — reweaves stale modules, fixes links, audits structure, syncs sibling vaults | `reweave`, `vault-audit`, `graph`, `sync`, `pulse` |
 | 📡 **Communication layer** | One read across mail, WhatsApp and Google Workspace — what's happening and what belongs to you | `comms-review`, `whatsapp-digest`, `gsuite-analysis` |
 | 📊 **CRM / ops** | Ready skills that connect to ClickUp — review your sales funnel and pull your weekly plan straight from the workspace | `clickup-review`, `review-core`, `tasklist` |
+| 🕸️ **Orchestration** | Design multi-agent workflows for the work no single session finishes — topology, casting, adversarial gates, emitted script | `workflow-design` |
 
 Each layer is independently useful; together they run a one-person company on autopilot.
 
@@ -25,43 +26,51 @@ Each layer is independently useful; together they run a one-person company on au
 
 ```
 ╔══════════════════════════════════════════════════════════════════════════════╗
-║      🦀  MODULAR CONTEXT SKILLS v2.1 — 26 CURATED WORKFLOWS                 ║
+║      🦀  MODULAR CONTEXT SKILLS v2.2 — 24 CURATED WORKFLOWS                  ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
 
  ┌───────────────┬───────────────┬───────────────┬───────────────┬───────────────┐
- │   CAPTURE     │   ANALYZE     │   CREATE      │   MAINTAIN    │   AUTOMATE    │
- │     (3)       │     (9)       │     (5)       │     (4)       │     (5)       │
+ │    CAPTURE    │    ANALYZE    │    CREATE     │   MAINTAIN    │   AUTOMATE    │
+ │      (3)      │      (9)      │      (5)      │      (4)      │      (3)      │
  ├───────────────┼───────────────┼───────────────┼───────────────┼───────────────┤
- │  process-     │  pulse        │  brief        │  log          │  ralph-prompt │
- │  transcripts  │  ⭐⭐⭐⭐⭐   │  ⭐⭐⭐⭐⭐   │  ⭐⭐⭐⭐     │  ⭐⭐⭐⭐     │
- │  ⭐⭐⭐⭐⭐   │               │               │               │               │
- │               │  vault-audit  │  ideas        │  reweave      │  ralph-       │
- │  whatsapp-    │  ⭐⭐⭐⭐     │  ⭐⭐⭐⭐     │  ⭐⭐⭐⭐     │  factory      │
- │  digest 🟡    │               │               │               │  ⭐⭐⭐⭐     │
- │  ⭐⭐⭐⭐     │  graph        │  copy         │  graduate     │               │
- │               │  ⭐⭐⭐⭐     │  ⭐⭐⭐⭐     │  ⭐⭐⭐⭐     │  overnight    │
- │  xdaily       │               │               │               │  ⭐⭐⭐⭐     │
- │  ⭐⭐⭐       │  weekly-learn │  learned      │  sync         │               │
- │               │  ⭐⭐⭐⭐     │  ⭐⭐⭐       │  ⭐⭐⭐       │  skill-       │
- │               │               │               │               │  creator      │
- │               │  playscript   │  tasklist     │               │  ⭐⭐⭐       │
+ │  process- 🟡  │  pulse        │  brief        │  log          │  workflow- 🟡 │
+ │  transcripts  │  ⭐⭐⭐⭐⭐   │  ⭐⭐⭐⭐⭐   │  ⭐⭐⭐⭐     │  design       │
+ │  ⭐⭐⭐⭐⭐   │               │               │               │  ⭐⭐⭐⭐⭐   │
+ │               │  vault-audit  │  ideas        │  reweave      │               │
+ │  whatsapp- 🟡 │  ⭐⭐⭐⭐     │  ⭐⭐⭐⭐     │  ⭐⭐⭐⭐     │  skill-       │
+ │  digest       │               │               │               │  creator      │
+ │  ⭐⭐⭐⭐     │  graph        │  copy         │  graduate     │  ⭐⭐⭐       │
+ │               │  ⭐⭐⭐⭐     │  ⭐⭐⭐⭐     │  ⭐⭐⭐⭐     │               │
+ │  xdaily       │               │               │               │  review-core  │
+ │  ⭐⭐⭐       │  weekly-learn │  learned      │  sync         │  ⭐⭐⭐       │
+ │               │  ⭐⭐⭐⭐     │  ⭐⭐⭐       │  ⭐⭐⭐       │               │
+ │               │               │               │               │               │
+ │               │  playscript   │  tasklist     │               │               │
  │               │  ⭐⭐⭐⭐     │  ⭐⭐⭐⭐     │               │               │
  │               │               │               │               │               │
- │               │  gsuite-      │               │               │               │
- │               │  analysis 🟡  │               │               │               │
+ │               │  gsuite- 🟡   │               │               │               │
+ │               │  analysis     │               │               │               │
  │               │  ⭐⭐⭐⭐     │               │               │               │
  │               │               │               │               │               │
  │               │  skills-audit │               │               │               │
  │               │  ⭐⭐⭐⭐     │               │               │               │
+ │               │               │               │               │               │
+ │               │  clickup- 🟡  │               │               │               │
+ │               │  review       │               │               │               │
+ │               │  ⭐⭐⭐⭐     │               │               │               │
+ │               │               │               │               │               │
+ │               │  comms- 🟡    │               │               │               │
+ │               │  review       │               │               │               │
+ │               │  ⭐⭐⭐⭐⭐   │               │               │               │
  ├───────────────┼───────────────┼───────────────┼───────────────┼───────────────┤
  │ Ingest data   │ Understand +  │ Produce       │ Vault health  │ Meta tools    │
- │ into vault    │ summarize     │ content       │ + housekeeping│ + automation  │
+ │ into vault    │ summarize     │ content       │ + housekeeping│ + workflows   │
  └───────────────┴───────────────┴───────────────┴───────────────┴───────────────┘
 
-   🟡 = pre-checked primary skill in plugin onboarding (3 total)
+   🟡 = pre-checked primary skill in plugin onboarding (6 total)
 ```
 
-**Total:** 23 skills across 5 categories. Primary skills (🟡) auto-selected in onboarding. Others available via sidebar browse.
+**Total:** 24 skills across 5 categories. Primary skills (🟡) auto-selected in onboarding. Others available via sidebar browse. Three Ralph-era automation skills were archived in v2.2 — see the **Archived** section below.
 
 ---
 
@@ -70,7 +79,7 @@ Each layer is independently useful; together they run a one-person company on au
 | Symbol | Meaning |
 |--------|---------|
 | ⭐ → ⭐⭐⭐⭐⭐ | Overall polish + utility (1 = concept, 5 = indispensable) |
-| 🟡 | Primary skill — pre-checked during onboarding (3 total) |
+| 🟡 | Primary skill — pre-checked during onboarding (6 total) |
 | 🌐 | Universal — works in any Obsidian vault |
 | 🏠 | Native to Modular Context — requires project folders + CLAUDE.md |
 | 🔒 | Has prerequisites (other skills or vault setup) — plugin gates install |
@@ -80,7 +89,7 @@ Each layer is independently useful; together they run a one-person company on au
 
 ## Quick start
 
-**New install?** Enable 3 primary skills (auto-checked in plugin onboarding). Run `skills-audit` for tailored recommendations on the rest.
+**New install?** Enable the 6 primary skills (auto-checked in plugin onboarding). Run `skills-audit` for tailored recommendations on the rest.
 
 **One-paragraph install:**
 1. Install the [Modular Context plugin](https://github.com/klemensgc/modular-context-obsidian-plugin) via BRAT or manual.
@@ -101,7 +110,7 @@ Each layer is independently useful; together they run a one-person company on au
 | **whatsapp-digest** 🟡 | ⭐⭐⭐⭐ | 🧠 E | 🏠 | `vault-structure` + `whatsapp-macos` | Mine WhatsApp groups → action items + blindspots + staleness |
 | **xdaily** | ⭐⭐⭐ | 🎓 L | 🏠 | `vault-structure` | Thread X/Twitter posts into vault modules by project |
 
-### 🔍 ANALYZE (7 skills) — understand vault + external
+### 🔍 ANALYZE (9 skills) — understand vault + external
 
 | Skill | ⭐ | Difficulty | Scope | Requires | Purpose |
 |-------|---|-----------|-------|----------|---------|
@@ -112,6 +121,8 @@ Each layer is independently useful; together they run a one-person company on au
 | **playscript** | ⭐⭐⭐⭐ | 🧠 E | 🏠 | `vault-structure` | 5-persona strategic analysis — surface cross-project plays |
 | **gsuite-analysis** 🟡 | ⭐⭐⭐⭐ | 🧠 E | 🌐 | `gsuite-connected` | Full Google Workspace — inbox sweep, calendar gap, meeting prep (25 MCP tools) |
 | **skills-audit** | ⭐⭐⭐⭐ | 🎓 L | 🌐 | — | Scan your library → 4-bucket report + contribution motivators |
+| **clickup-review** 🟡 🔒 | ⭐⭐⭐⭐ | 👷 O | 🌐 | `clickup-connected` + `python3` + `review-core` | Sales-funnel review — count per stage, deals near close, stale leads, value sums |
+| **comms-review** 🟡 🔒 | ⭐⭐⭐⭐⭐ | 🧠 E | 🌐 | `clickup-connected` + `whatsapp-macos` + `gsuite-connected` + `python3` + `review-core` | Cross-channel owner overview — ClickUp + WhatsApp + Gmail in one read |
 
 ### ✏️ CREATE (5 skills) — produce content
 
@@ -132,14 +143,23 @@ Each layer is independently useful; together they run a one-person company on au
 | **graduate** 🔒 | ⭐⭐⭐⭐ | 👷 O | 🏠 | `vault-structure` + `process-transcripts` | Promote buried transcript ideas → standalone modules |
 | **sync** | ⭐⭐⭐ | 🧠 E | 🏠 | `vault-structure` | Bi-directional vault sync (CEO brain ↔ secondary brain) |
 
-### 🤖 AUTOMATE (4 skills) — meta-tools + automation
+### 🤖 AUTOMATE (3 skills) — meta-tools + orchestration
 
 | Skill | ⭐ | Difficulty | Scope | Requires | Purpose |
 |-------|---|-----------|-------|----------|---------|
-| **ralph-prompt** | ⭐⭐⭐⭐ | 👷 O | 🌐 | — | Interactive wizard for autonomous-loop prompts |
-| **ralph-factory** 🔒 | ⭐⭐⭐⭐ | 🧠 E | 🏠 | `vault-structure` + `ralph-prompt` | Generate 20 strategic CEO-angle prompts per run |
-| **overnight** 🔒 | ⭐⭐⭐⭐ | 🧠 E | 🌐 | `ralph-prompt` | Chain Ralph loops for batch / overnight processing |
+| **workflow-design** 🟡 | ⭐⭐⭐⭐⭐ | 👷 O | 🌐 | `python3` | Design multi-agent workflows — priorities interview, topology pick, per-stage casting, adversarial gates, validated script |
 | **skill-creator** | ⭐⭐⭐ | 👷 O | 🌐 | — | Interactive guide for building your own high-quality skills |
+| **review-core** | ⭐⭐⭐ | 🧠 E | 🌐 | `clickup-connected` + `python3` | Internal library for the `*-review` family — not user-triggered, installed as a dependency |
+
+### 🗄️ Archived (no longer shipped)
+
+Removed from `skills[]` in registry v2.2 (2026-08-06) and recorded in the registry's top-level `archived[]`. The folders stay in `core/` with a deprecation note at the top of `SKILL.md`, so existing installs keep working — but the plugin no longer offers them.
+
+| Skill | Archived | Reason |
+|-------|----------|--------|
+| **ralph-prompt** | 2026-08-06 | Superseded by native Claude Code workflow orchestration — see `workflow-design` |
+| **ralph-factory** | 2026-08-06 | Superseded by native Claude Code workflow orchestration — see `workflow-design` |
+| **overnight** | 2026-08-06 | Superseded by native Claude Code workflow orchestration — see `workflow-design` |
 
 ---
 
@@ -171,7 +191,7 @@ Each layer is independently useful; together they run a one-person company on au
 **You just joined and want to get productive?**
 
 1. **Install the Modular Context plugin** ([guide](https://github.com/klemensgc/modular-context-obsidian-plugin#install))
-2. **Enable primary skills** — they're pre-checked in onboarding (Synthesise Files, WhatsApp Digest, Gmail + G-Suite)
+2. **Enable primary skills** — they're pre-checked in onboarding (Synthesise Files, Workflow Design, WhatsApp Digest, Gmail + G-Suite, ClickUp Review, Comms Review)
 3. **Run `skills-audit`** → see which additional skills fit your role and vault state
 4. **Pick 1-2 per week** — don't overload. Each skill is a playbook to learn, not just a button to press.
 5. **Ask in the team channel** when stuck — the `description` field is a hint, the `SKILL.md` body is the manual.
@@ -255,7 +275,7 @@ modular-context-skills/
 │   │   ├── SKILL.md                (or COMMAND.md for slash-commands)
 │   │   ├── references/             (optional — templates, examples, personas)
 │   │   └── scripts/                (optional — Python helpers)
-│   └── ... (23 skills)
+│   └── ... (24 shipped + 3 archived folders kept for existing installs)
 └── .github/workflows/
     └── validate-skills.yml         (light-touch CI: JSON schema + folder presence)
 ```
@@ -264,9 +284,9 @@ modular-context-skills/
 
 ## Status + versioning
 
-- **Registry version:** `2.0.0` (schema v2 — adds stars/difficulty/value/scope/requires, rename categories to analyze/capture/create/maintain/automate)
+- **Registry version:** `2.2.0` (schema v2 — stars/difficulty/value/scope/requires, categories analyze/capture/create/maintain/automate; v2.2 adds `workflow-design` and the top-level `archived[]` array)
 - **Per-skill version:** independent semver; bump on SKILL.md content changes (patch for fixes, minor for new patterns, major for breaking pattern changes)
-- **Tier:** all 23 in `core/` (curated by maintainer). Future: `community/` tier for user-contributed non-core skills.
+- **Tier:** all 24 shipped skills in `core/` (curated by maintainer). Future: `community/` tier for user-contributed non-core skills.
 - **Sync:** plugin fetches registry + skill content from GitHub raw on load (5 min cache); push to `main` → reachable ~5 min later.
 
 ---

@@ -1,6 +1,6 @@
 {
-  "version": "2.1.0",
-  "updated": "2026-06-09",
+  "version": "2.2.0",
+  "updated": "2026-08-06",
   "source": "https://github.com/klemensgc/modular-context-skills",
   "schemaVersion": 2,
   "categories": {
@@ -23,7 +23,7 @@
       "id": "pulse",
       "label": "Pulse",
       "description": "CEO Pulse — deep vault scan, structured briefing, decision questions, actionable next-session prompts.",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "category": "analyze",
       "tier": "core",
       "files": ["SKILL.md", "references/question-types.md"],
@@ -104,7 +104,7 @@
       "id": "reweave",
       "label": "Reweave",
       "description": "Cascade-update stale or disconnected modules. Scans vault for outdated content and automatically refreshes it.",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "category": "maintain",
       "tier": "core",
       "files": ["COMMAND.md"],
@@ -137,11 +137,12 @@
       "id": "graph",
       "label": "Graph",
       "description": "Analyzes knowledge graph — orphans, dangling links, clusters, dependency depth, staleness heatmap, cross-domain bridges.",
-      "version": "1.0.0",
+      "version": "2.0.0",
+      "breaking": "2.0.0: staleness/orphans JSON zmienił kontrakt (cadence→type, cadence_days→budget_days, updated→last_change; doszły last_change_source, freshness_source, warnings, budget_source, excluded_from_staleness, stale_hubs). Świeżość liczona z git log (bez commitów Meta: true), budżety per typ + huby 7d.",
       "category": "analyze",
       "tier": "core",
       "files": ["SKILL.md", "scripts/vault-graph.py"],
-      "size": "28KB",
+      "size": "44KB",
       "primary": false,
       "stars": 4,
       "difficulty": "expert",
@@ -262,52 +263,20 @@
       "requires": ["vault-structure"]
     },
     {
-      "id": "ralph-prompt",
-      "label": "Ralph Prompt",
-      "description": "Interactive wizard for building structured prompts for the Ralph autonomous loop plugin.",
+      "id": "workflow-design",
+      "label": "Workflow Design",
+      "description": "Interactive designer for multi-agent workflows — priorities interview, topology pick with ASCII preview, per-stage casting, adversarial gates, and a validated script ready to run or save.",
       "version": "1.0.0",
       "category": "automate",
       "tier": "core",
-      "files": ["SKILL.md", "references/prompt-anatomy.md"],
-      "size": "12KB",
-      "primary": false,
-      "stars": 4,
+      "files": ["SKILL.md", "references/topologies.md", "references/design-knobs.md", "references/gotchas.md", "scripts/find_precedents.py"],
+      "size": "36KB",
+      "primary": true,
+      "stars": 5,
       "difficulty": "operator",
-      "value": "medium",
-      "scope": "universal",
-      "requires": []
-    },
-    {
-      "id": "ralph-factory",
-      "label": "Ralph Factory",
-      "description": "Meta-prompt factory — generates 20 strategic Ralph prompts targeting CEO success factors per run.",
-      "version": "1.0.0",
-      "category": "automate",
-      "tier": "core",
-      "files": ["SKILL.md"],
-      "size": "12KB",
-      "primary": false,
-      "stars": 4,
-      "difficulty": "expert",
-      "value": "high",
-      "scope": "native-mc",
-      "requires": ["vault-structure", "ralph-prompt"]
-    },
-    {
-      "id": "overnight",
-      "label": "Overnight",
-      "description": "Plans and executes chained Ralph loops as one continuous session with a queue file. For overnight batch processing.",
-      "version": "1.0.0",
-      "category": "automate",
-      "tier": "core",
-      "files": ["SKILL.md"],
-      "size": "12KB",
-      "primary": false,
-      "stars": 4,
-      "difficulty": "expert",
       "value": "high",
       "scope": "universal",
-      "requires": ["ralph-prompt"]
+      "requires": ["python3"]
     },
     {
       "id": "tasklist",
@@ -414,7 +383,7 @@
       "tier": "core",
       "files": ["SKILL.md", "scripts/audit.py"],
       "size": "10KB",
-      "primary": true,
+      "primary": false,
       "stars": 4,
       "difficulty": "operator",
       "value": "high",
@@ -430,12 +399,29 @@
       "tier": "core",
       "files": ["SKILL.md"],
       "size": "9KB",
-      "primary": true,
+      "primary": false,
       "stars": 5,
       "difficulty": "expert",
       "value": "high",
       "scope": "universal",
       "requires": ["clickup-connected", "whatsapp-macos", "gsuite-connected", "python3", "review-core"]
+    }
+  ],
+  "archived": [
+    {
+      "id": "ralph-prompt",
+      "archivedAt": "2026-08-06",
+      "reason": "Superseded by native Claude Code workflow orchestration — see workflow-design"
+    },
+    {
+      "id": "ralph-factory",
+      "archivedAt": "2026-08-06",
+      "reason": "Superseded by native Claude Code workflow orchestration — see workflow-design"
+    },
+    {
+      "id": "overnight",
+      "archivedAt": "2026-08-06",
+      "reason": "Superseded by native Claude Code workflow orchestration — see workflow-design"
     }
   ]
 }

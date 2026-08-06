@@ -10,6 +10,8 @@ description: |
   "nowa wersja promptow", "odpal factory", "prompt factory", "20 promptow"
 ---
 
+> **DEPRECATED (2026-08):** superseded by native workflow orchestration; see `core/workflow-design`.
+
 # Ralph Prompt Factory
 
 Generuje 20 strategicznych promptow Ralph z meta-promptu. Kazdy run tworzy nowa wersje (v1, v2, v3...).

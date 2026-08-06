@@ -73,7 +73,7 @@ Check each before opening PR:
 
 - [ ] **Output paths follow `_workspace/{YYYY-MM}/w{N}/` pattern** (not vault root, not `_transcripts/`)
 - [ ] **Uses wiki-links `[[]]`** for vault references (not raw markdown links to local files)
-- [ ] **Respects frontmatter standards** — `updated:` + `status:` + `cadence:` when modifying modules
+- [ ] **Respects frontmatter standards** — sets `type:` + `status:` when modifying modules; never hand-writes `updated:` (tooling stamps it). Legacy fields `cadence:` / `audience:` / `depends-on:` are gone — don't reintroduce them
 - [ ] **Privacy discipline** — skill never logs: email bodies, subject lines, tokens, API keys, PII
 - [ ] **Multi-account aware** (if using Google Workspace MCP) — always passes `account` param explicitly when working across boundaries
 - [ ] **Reads before writes** — verifies target file exists + reads current content before overwriting
@@ -108,11 +108,13 @@ New fields (v2.1+) needed per skill entry:
 
 ### Valid `category` values (mirrors main groups)
 
-- **analyze** — read + understand (pulse, graph, vault-audit)
-- **capture** — ingest external data (process-transcripts, whatsapp-digest, xdaily, gsuite-analysis)
+- **analyze** — read + understand (pulse, graph, vault-audit, clickup-review, comms-review)
+- **capture** — ingest external data (process-transcripts, whatsapp-digest, xdaily)
 - **create** — produce content (brief, copy, ideas, learned)
 - **maintain** — vault housekeeping (reweave, graduate, sync, log)
-- **automate** — tooling / meta (ralph-prompt, ralph-factory, overnight, skill-creator)
+- **automate** — tooling / meta / orchestration (workflow-design, skill-creator, review-core)
+
+> `ralph-prompt`, `ralph-factory` and `overnight` were the earlier **automate** examples. They were archived in registry v2.2 (2026-08-06), superseded by native workflow orchestration — don't model a new skill on them.
 
 ### Valid `requires` values
 
@@ -126,6 +128,9 @@ New fields (v2.1+) needed per skill entry:
 - `"whatsapp-macos"` — macOS with WhatsApp.app installed
 - `"git-initialized"` — vault is a git repo (for commit-based skills)
 - `"python3"` — Python 3 available in PATH (for skills with scripts)
+- `"clickup-connected"` — ClickUp personal API token configured (`~/.modular-context/clickup/credentials.json` exists)
+
+The authoritative list is `requiresFlags` in `registry.json` — add a flag there first, then use it.
 
 ### Rating guidance
 
@@ -186,7 +191,7 @@ Before opening PR:
 - **Validation:** GitHub Action runs basic schema check on PR (light-touch, reports not blocks)
 - **Deep validation:** use the **skill-validator** admin skill (lives in maintainer's vault, not this repo) for pre-merge compliance check
 - **Semver per skill:** bump `version` in registry when changing SKILL.md body (patch for fixes, minor for new patterns, major for breaking pattern changes)
-- **Deprecation:** we don't delete skills — move to `core/archived/{id}/` + mark `tier: "archived"` in registry
+- **Deprecation:** we don't delete skills. As of registry v2.2 the mechanism is: remove the entry from `skills[]`, add `{id, archivedAt, reason}` to the top-level `archived[]` array, and leave the folder in `core/{id}/` with a one-line deprecation blockquote above the H1 in `SKILL.md`. Existing installs keep working; the plugin stops offering the skill.
 
 ---
 
